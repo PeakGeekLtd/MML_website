@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Me-Suite Portfolio</title>
+    <style>
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #1a2236; 
+            color: white; 
+        }
+
+        header { padding: 2rem; display: flex; justify-content: space-between; align-items: center; }
+        
+        .hero-text {
+            max-width: 800px;
+            margin: 40px auto 20px;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .hero-text h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #38bdf8, #fed6e3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text p { font-size: 1.1rem; line-height: 1.6; color: #cbd5e1; }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px; padding: 20px; max-width: 1400px; margin: auto;
+        }
+
+        /* Card Styles */
+        .group-longevity { background: linear-gradient(135deg, #a8edea, #fed6e3); color: #1e293b; }
+        .group-transformation { background: linear-gradient(135deg, #5ee7df, #b490ca); color: #1e293b; }
+        .group-performance { background: linear-gradient(135deg, #e2e8f0, #94a3b8); color: #1e293b; }
+
+        .card {
+            aspect-ratio: 2/3; border-radius: 28px; display: flex; align-items: flex-end;
+            padding: 20px; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.1); overflow: hidden; position: relative;
+        }
+
+        .card-with-image { border: 2px solid rgba(56, 189, 248, 0.5); box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
+        .card:hover { transform: translateY(-12px) scale(1.02); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+
+        .card-overlay {
+            background: rgba(255, 255, 255, 0.25); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            width: 100%; padding: 15px; border-radius: 20px; text-align: center;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; 
+            width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+        }
+        .modal-content {
+            background: #1e293b; margin: 2% auto; padding: 40px; width: 90%; 
+            max-width: 950px; border-radius: 35px; border: 1px solid rgba(255,255,255,0.1);
+            position: relative; color: white; max-height: 90vh; overflow-y: auto;
+        }
+
+        .screenshot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 25px 0; }
+        .ss-slot { aspect-ratio: 9/16; background: #0f172a; border-radius: 15px; border: 1px solid rgba(56,189,248,0.2); background-size: cover; background-position: center; }
+
+        .desc-sub { font-size: 0.95rem; line-height: 1.6; color: #cbd5e1; text-align: left; }
+        .privacy-point { color: #38bdf8; font-weight: bold; margin-top: 5px; display: block; }
+        
+        .no-risk-box {
+            background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 20px; border-radius: 20px; margin-top: 25px; text-align: center;
+        }
+
+        .buy-btn { width: 100%; padding: 18px; background: white; color: #0f172a; border: none; border-radius: 18px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        .buy-btn:hover { background: #38bdf8; }
+
+        .legal-footer { margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: center; gap: 20px; }
+        .legal-link { color: #64748b; text-decoration: none; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 style="margin:0; letter-spacing: 1px;">MettleAndMindLab</h1>
+        <a href="mailto:contact@mettleandmindlab.com" style="color:#38bdf8; text-decoration:none; font-weight:bold;">Contact Me</a>
+    </header>
+
+    <section class="hero-text">
+        <h2>Solutions for a life in motion.</h2>
+        <p>From cognitive support to elite athletic performance, the <strong>MettleAndMindLab</strong> provides the precision tools you need to thrive. Built on privacy and designed for the moments that matter most.</p>
+    </section>
+
+    <main id="app-grid" class="grid-container"></main>
+
+    <div id="app-modal" class="modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        const appData = [
+            { 
+                name: "MML - RemindMe", 
+                group: "longevity", 
+                price: "£4.99", 
+                image: "images/RemindMeCard.png", 
+                desc: "Do you have an iPhone and an unused iPad? Create a dedicated care point and a link between you and a loved one.",
+                extendedDesc: `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                        <div>
+                            <h3 style="color: #38bdf8; margin-bottom: 15px;">For You: The Admin Mirror</h3>
+                            <ul style="padding-left: 18px; line-height: 1.8;">
+                                <li><strong>Rich Media Messaging:</strong> Send text, audio, or video messages with your photo ID.</li>
+                                <li><strong>Task & Appointment Management:</strong> Set remote alarms for medications and visits.</li>
+                                <li><strong>Live Mirror-Mode:</strong> See exactly what your relative sees for remote support.</li>
+                                <li><strong>Active Reassurance:</strong> Know when messages are read or tasks completed.</li>
+                                <li><strong>Safety Heartbeat:</strong> Receive alerts for low battery or offline Wi-Fi.</li>
+                                <li class="privacy-point">Privacy guaranteed: All data is contained in your iCloud account and isn't shared with anyone else.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 style="color: #38bdf8; margin-bottom: 15px;">For Your Loved One: The Viewer</h3>
+                            <ul style="padding-left: 18px; line-height: 1.8;">
+                                <li><strong>High-Contrast Interface:</strong> Easy-to-read clock, calendar, and task board.</li>
+                                <li><strong>Dynamic Atmosphere:</strong> Background matches local time and weather.</li>
+                                <li><strong>Personal Connection:</strong> Dedicated space for news and family updates.</li>
+                                <li><strong>Independence Support:</strong> Gentle reminders for medications and special dates.</li>
+                                <li class="privacy-point">Privacy guaranteed: Camera and microphone access is blocked—no one can see or hear them.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="no-risk-box">
+                        <strong>RemindMe is a no-risk gift:</strong> If it doesn't fit your family's needs, cancel before the trial ends and keep the high-fidelity clock, calendar, and weather functionality forever.
+                    </div>
+                `,
+                screen1: "images/remind-sc1.png", 
+                screen2: "images/remind-sc2.png", 
+                screen3: "images/remind-sc3.png" 
+            },
+            { name: "MML - VitalMe", group: "longevity", price: "£9.99", desc: "Functional fitness for retirees." },
+            { name: "MML - NewMe", group: "longevity", price: "£14.99", desc: "Post-transplant recovery." },
+            { name: "MML - PT_Me", group: "transformation", price: "£19.99", desc: "Personal training." },
+            { name: "MML - JustMe", group: "transformation", price: "£12.99", desc: "Solo habit change." },
+            { name: "MML - NotJustMe", group: "transformation", price: "£14.99", desc: "Post-pregnancy recovery." },
+            { name: "MML - EliteMe-Football", group: "performance", price: "£29.99", desc: "Performance science." },
+            { name: "MML - AnalyzeMe - Diving", group: "performance", price: "£49.99", desc: "Biomechanical feedback." },
+            { name: "MML - AnalyzeMe - Trampoline", group: "performance", price: "£49.99", desc: "Kinematic analysis." },
+            { name: "MML - AnalyzeMe - Gymnastics", group: "performance", price: "£49.99", desc: "Precision feedback." }
+        ];
+
+        const grid = document.getElementById('app-grid');
+
+        appData.forEach(app => {
+            const card = document.createElement('div');
+            card.className = `card group-${app.group}`;
+            if (app.image) {
+                card.classList.add('card-with-image');
+                card.style.backgroundImage = `linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.6)), url('${app.image}')`;
+                card.style.backgroundSize = 'cover';
+                card.style.backgroundPosition = 'center';
+            }
+            card.innerHTML = `<div class="card-overlay"><h2 style="margin:0; font-size:1.1rem">${app.name}</h2></div>`;
+            card.onclick = () => openModal(app);
+            grid.appendChild(card);
+        });
+
+        function openModal(app) {
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+            body.innerHTML = `
+                <div style="background:#38bdf8; color:#0f172a; display:inline-block; padding:5px 15px; border-radius:20px; font-weight:bold; margin-bottom:15px;">${app.price}</div>
+                <h1 style="margin-top:0; font-size: 2.2rem;">${app.name}</h1>
+                <div style="font-size:1.2rem; line-height:1.6; margin-bottom:25px;">${app.desc}</div>
+                <div class="screenshot-grid">
+                    <div class="ss-slot" style="background-image: url('${app.screen1 || ''}')"></div>
+                    <div class="ss-slot" style="background-image: url('${app.screen2 || ''}')"></div>
+                    <div class="ss-slot" style="background-image: url('${app.screen3 || ''}')"></div>
+                </div>
+                <div class="desc-sub">${app.extendedDesc || "<p>Coming soon to the Me-Suite ecosystem.</p>"}</div>
+                <button class="buy-btn">View on App Store</button>
+                <div class="legal-footer">
+                    <a href="#" class="legal-link">Privacy Policy</a>
+                    <a href="#" class="legal-link">Terms of Service</a>
+                    <a href="#" class="legal-link">EULA</a>
+                </div>
+            `;
+            modal.style.display = "block";
+        }
+
+        function closeModal() { document.getElementById('app-modal').style.display = "none"; }
+    </script>
+</body>
+</html>
