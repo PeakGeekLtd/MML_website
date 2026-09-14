@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - RemindMe | Mettle & Mind Lab</title>
+    <meta name="description" content="Privacy Policy for RemindMe iOS/iPadOS app by Peak Geek Ltd / Mettle & Mind Lab.">
+    <style>
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #1a2236; 
+            color: #cbd5e1;
+            line-height: 1.75;
+        }
+
+        header { 
+            padding: 2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 40px;
+            background: #1e293b;
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+
+        .policy-nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .policy-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #38bdf8;
+            padding: 8px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .policy-back-btn:hover {
+            background: rgba(56, 189, 248, 0.3);
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        .policy-action-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .policy-action-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            color: white;
+        }
+
+        .policy-h1 {
+            font-size: 2.3rem;
+            margin-top: 0;
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #38bdf8, #fed6e3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .policy-h2 {
+            font-size: 1.4rem;
+            color: #38bdf8;
+            margin-top: 36px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .policy-h3 {
+            font-size: 1.15rem;
+            color: #f1f5f9;
+            margin-top: 24px;
+            margin-bottom: 10px;
+        }
+
+        .policy-p {
+            margin-bottom: 16px;
+            color: #cbd5e1;
+        }
+
+        .policy-hr {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 28px 0;
+        }
+
+        .policy-ul {
+            padding-left: 22px;
+            margin-bottom: 20px;
+        }
+
+        .policy-ul li {
+            margin-bottom: 10px;
+            line-height: 1.65;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 14px;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            background: #0f172a;
+        }
+
+        .policy-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.92rem;
+        }
+
+        .policy-table th {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            padding: 14px 18px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .policy-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            color: #cbd5e1;
+            vertical-align: top;
+        }
+
+        .policy-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .policy-link {
+            color: #38bdf8;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color 0.2s ease;
+        }
+
+        .policy-link:hover {
+            color: #fed6e3;
+        }
+
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 2px 7px;
+            border-radius: 6px;
+            font-size: 0.88em;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        .policy-footer-nav {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 style="margin:0; letter-spacing: 1px; font-size:1.5rem;"><a href="index.html" style="color:white; text-decoration:none;">MettleAndMindLab</a></h1>
+        <a href="mailto:contact@mettleandmindlab.com" style="color:#38bdf8; text-decoration:none; font-weight:bold;">Contact Me</a>
+    </header>
+
+    <div class="container">
+        <div class="policy-nav-bar">
+            <a href="index.html" class="policy-back-btn">
+                <span>&#8592;</span> Back to Portfolio
+            </a>
+            <div style="display:flex; gap:10px;">
+                <a href="RemindMe_Privacy_Policy.md" target="_blank" class="policy-action-btn">
+                    <span>&#128196;</span> Raw .md
+                </a>
+            </div>
+        </div>
+
+        <h1 class="policy-h1">Privacy Policy for RemindMe</h1>
+        <p class="policy-p"><strong>Last updated:</strong> 14 September 2026</p>
+        <p class="policy-p">RemindMe is provided by <strong>Peak Geek Ltd</strong>, trading as <strong>Mettle & Mind Lab</strong> ("we", "us", "our"), based in Sheffield, United Kingdom. This policy explains what information RemindMe collects, why, and how it is protected. It applies to the RemindMe app on iPhone and iPad, and to any related setup or account services.</p>
+        <p class="policy-p">If you have questions about this policy, contact us at <strong><a href="mailto:support@mettleandmindlab.com" class="policy-link">support@mettleandmindlab.com</a></strong>.</p>
+        
+        <hr class="policy-hr">
+        
+        <h2 class="policy-h2">1. The short version</h2>
+        <ul class="policy-ul">
+            <li>RemindMe is built so that the content you and your family create — photos, messages, reminders, calendar entries — is <strong>stored in your own Apple iCloud account via CloudKit</strong>, and is only ever visible to the admin's Apple ID and to the family members they specifically invite. We do not have access to it, and neither does anyone else.</li>
+            <li>We never store your password. Sign-in is handled securely through our Azure-based identity service.</li>
+            <li>The only personal information we hold ourselves is your <strong>email address and display name</strong>, so we can manage your account, keep your subscription and family members working across our apps, and let you know about relevant updates.</li>
+            <li>RemindMe does not sell your data, and does not use advertising or tracking SDKs.</li>
+        </ul>
+        <p class="policy-p">The sections below explain this in full detail.</p>
+        
+        <hr class="policy-hr">
+        
+        <h2 class="policy-h2">2. Who we are</h2>
+        <p class="policy-p">RemindMe is developed and operated by Peak Geek Ltd, trading as Mettle & Mind Lab, a UK-based software developer. For the purposes of UK GDPR and the Data Protection Act 2018, we are the <strong>data controller</strong> for the account information described in Section 3, and a <strong>data processor</strong> with no access to the content you store via CloudKit, described in Section 4.</p>
+        
+        <h2 class="policy-h2">3. Information we collect and manage ourselves</h2>
+        <p class="policy-p">To create and manage your RemindMe account, we store the following in our own secure database, hosted on Microsoft Azure:</p>
+        <ul class="policy-ul">
+            <li><strong>Email address</strong></li>
+            <li><strong>Display name / username</strong></li>
+        </ul>
+        <p class="policy-p">We collect this because RemindMe is one app in a small family of tools ("Me Suite") from Mettle & Mind Lab, and this lets us:</p>
+        <ul class="policy-ul">
+            <li>Identify your account and link it to your subscription entitlement</li>
+            <li>Recognise you if you use more than one of our apps, so your account can be managed consistently</li>
+            <li>Let secondary family members join a shared household under a primary subscriber's entitlement</li>
+            <li>Send you service-related messages (for example, trial or subscription notices) and, where relevant, news about features or other Mettle & Mind Lab tools</li>
+        </ul>
+        <p class="policy-p">We do <strong>not</strong> store your password. Authentication is handled by our identity provider (Microsoft Entra External ID) and verified through our Azure backend — your password never passes through or is retained by the RemindMe app itself, and we do not have access to it in plain form.</p>
+        <p class="policy-p">We do not collect payment card details. Subscription purchases are handled entirely by Apple through StoreKit / the App Store, under Apple's own privacy and payment terms.</p>
+        
+        <h2 class="policy-h2">4. Information stored in your iCloud account (CloudKit)</h2>
+        <p class="policy-p">RemindMe's core content — reminders, calendar entries, messages, photos, voice recordings, and the paired iPad's status information — is stored using Apple's CloudKit, inside the admin's own private iCloud account.</p>
+        <p class="policy-p">This means:</p>
+        <ul class="policy-ul">
+            <li>This content is <strong>not visible to us</strong>, or to anyone else, unless the admin user chooses to invite them as a family member using Apple's own secure sharing (<code>CKShare</code>) — the same mechanism used for shared iCloud photo albums or notes.</li>
+            <li>We cannot read, access, or recover this content on your behalf, because we have no technical access to it. If you lose access to the admin's Apple ID (for example, by forgetting the associated Apple ID password) we cannot retrieve this data — only Apple, through their standard Apple ID account recovery process, can help.</li>
+            <li>Location information (used to show local weather and sunrise/sunset detail on the paired iPad) is requested from the device's own location services, and is stored and synced via CloudKit in the same private way — it is not sent to or stored by us.</li>
+        </ul>
+        <p class="policy-p">Because CloudKit data lives in your own iCloud account, its handling is also governed by <strong>Apple's Privacy Policy</strong> (available at <a href="https://apple.com/legal/privacy" target="_blank" rel="noopener noreferrer" class="policy-link">apple.com/legal/privacy</a>), which we encourage you to review.</p>
+        
+        <h2 class="policy-h2">5. Third parties we rely on</h2>
+        <p class="policy-p">We use a small number of trusted service providers to run RemindMe. None of them are permitted to use your information for their own purposes.</p>
+        
+        <div class="table-container">
+            <table class="policy-table">
+                <thead>
+                    <tr>
+                        <th>Provider</th>
+                        <th>What they do for us</th>
+                        <th>What they may process</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Apple</strong></td>
+                        <td>CloudKit sync, iCloud storage, App Store purchases and subscriptions, push notifications</td>
+                        <td>Content you store via CloudKit; purchase and subscription status</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Microsoft Azure</strong></td>
+                        <td>Hosts our backend (Azure Functions), our account database, and identity/sign-in (Microsoft Entra External ID)</td>
+                        <td>Email address, display name, sign-in credentials (held by Microsoft, not by us), subscription entitlement status</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Azure Communication Services</strong></td>
+                        <td>Sends account-related emails (e.g. trial expiry notices)</td>
+                        <td>Email address, message content</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="policy-p">We do not use third-party advertising networks, analytics SDKs, or tracking tools in RemindMe.</p>
+        
+        <h2 class="policy-h2">6. Why we process your information — legal basis</h2>
+        <p class="policy-p">Under UK GDPR, we rely on the following legal bases:</p>
+        <ul class="policy-ul">
+            <li><strong>Performance of a contract</strong> — to create your account, run your subscription/trial, and provide the app's core functionality.</li>
+            <li><strong>Legitimate interests</strong> — to keep our small suite of apps working consistently for users across them, and to maintain the security and reliability of the service.</li>
+            <li><strong>Consent</strong> — where we ask permission for anything beyond what's needed to run the service (for example, optional news about new features).</li>
+        </ul>
+        
+        <h2 class="policy-h2">7. Data retention</h2>
+        <p class="policy-p">We keep your account information (email and display name) for as long as your account is active. If you delete your account, we delete this information within a reasonable period, except where we're required to keep limited records for legal, accounting, or fraud-prevention purposes.</p>
+        <p class="policy-p">Content stored via CloudKit remains under your control at all times, in your own iCloud account, and is governed by your own iCloud storage and retention settings — not ours.</p>
+        
+        <h2 class="policy-h2">8. Your rights</h2>
+        <p class="policy-p">Under UK GDPR, you have the right to:</p>
+        <ul class="policy-ul">
+            <li>Access the personal information we hold about you</li>
+            <li>Correct inaccurate information</li>
+            <li>Request deletion of your account and associated information</li>
+            <li>Restrict or object to certain processing</li>
+            <li>Receive a copy of your data in a portable format</li>
+            <li>Withdraw consent at any time, where processing is based on consent</li>
+        </ul>
+        <p class="policy-p">To exercise any of these rights, email <strong><a href="mailto:support@mettleandmindlab.com" class="policy-link">support@mettleandmindlab.com</a></strong>. You can also delete your RemindMe account directly within the app.</p>
+        <p class="policy-p">If you're not satisfied with our response, you have the right to complain to the UK Information Commissioner's Office (ICO) at <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer" class="policy-link">ico.org.uk</a>.</p>
+        
+        <h2 class="policy-h2">9. Children and vulnerable users</h2>
+        <p class="policy-p">RemindMe is designed to be <em>used by</em> people living with dementia, on a device set up and managed on their behalf by a family admin. RemindMe is not directed at children, and account registration is intended for adult family members acting as the admin. We do not knowingly collect account information directly from children.</p>
+        
+        <h2 class="policy-h2">10. International data transfers</h2>
+        <p class="policy-p">Our account database and backend are hosted on Microsoft Azure infrastructure; Apple's CloudKit and App Store services operate their own global infrastructure. Where information is transferred outside the UK, our providers maintain appropriate safeguards (such as Standard Contractual Clauses) as required under UK GDPR.</p>
+        
+        <h2 class="policy-h2">11. Security</h2>
+        <p class="policy-p">We use industry-standard measures to protect the information we hold, including encrypted connections (HTTPS/TLS), secure credential storage via Azure Key Vault, and authentication through Microsoft's Entra identity platform rather than storing passwords ourselves. Content synced via CloudKit benefits from Apple's own iCloud encryption and security model.</p>
+        <p class="policy-p">No system can be guaranteed 100% secure, but we take reasonable steps to protect your information against unauthorised access, loss, or misuse.</p>
+        
+        <h2 class="policy-h2">12. Changes to this policy</h2>
+        <p class="policy-p">We may update this policy from time to time, for example as RemindMe's features evolve. We'll update the "Last updated" date above when we do. Significant changes will be highlighted within the app or by email where appropriate.</p>
+        
+        <h2 class="policy-h2">13. Contact us</h2>
+        <p class="policy-p">Questions, requests, or concerns about this policy or your data:</p>
+        <p class="policy-p"><strong>Email:</strong> <a href="mailto:support@mettleandmindlab.com" class="policy-link">support@mettleandmindlab.com</a></p>
+        <p class="policy-p"><strong>Company:</strong> Peak Geek Ltd, trading as Mettle & Mind Lab</p>
+        <p class="policy-p"><strong>Location:</strong> Sheffield, United Kingdom</p>
+
+        <div class="policy-footer-nav">
+            <a href="index.html" class="policy-back-btn">
+                <span>&#8592;</span> Back to Portfolio
+            </a>
+            <button class="policy-action-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <span>&#8593;</span> Back to top
+            </button>
+        </div>
+    </div>
+
+</body>
+</html>

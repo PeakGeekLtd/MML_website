@@ -66,6 +66,31 @@
             background: #1e293b; margin: 2% auto; padding: 40px; width: 90%; 
             max-width: 950px; border-radius: 35px; border: 1px solid rgba(255,255,255,0.1);
             position: relative; color: white; max-height: 90vh; overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #cbd5e1;
+            font-size: 1.4rem;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            transform: scale(1.08);
         }
 
         .screenshot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 25px 0; }
@@ -83,7 +108,194 @@
         .buy-btn:hover { background: #38bdf8; }
 
         .legal-footer { margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: center; gap: 20px; }
-        .legal-link { color: #64748b; text-decoration: none; font-size: 0.8rem; }
+        .legal-link { 
+            color: #94a3b8; 
+            text-decoration: none; 
+            font-size: 0.85rem; 
+            cursor: pointer; 
+            padding: 4px 10px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .legal-link:hover { 
+            color: #38bdf8; 
+            background: rgba(56, 189, 248, 0.1); 
+        }
+
+        /* Privacy Policy Viewer Styles */
+        .policy-nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .policy-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #38bdf8;
+            padding: 8px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .policy-back-btn:hover {
+            background: rgba(56, 189, 248, 0.3);
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        .policy-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .policy-action-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .policy-action-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            color: white;
+        }
+
+        .policy-body {
+            line-height: 1.75;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+
+        .policy-h1 {
+            font-size: 2.2rem;
+            margin-top: 0;
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #38bdf8, #fed6e3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .policy-h2 {
+            font-size: 1.35rem;
+            color: #38bdf8;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .policy-h3 {
+            font-size: 1.1rem;
+            color: #f1f5f9;
+            margin-top: 22px;
+            margin-bottom: 10px;
+        }
+
+        .policy-p {
+            margin-bottom: 16px;
+            color: #cbd5e1;
+        }
+
+        .policy-hr {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 28px 0;
+        }
+
+        .policy-ul {
+            padding-left: 22px;
+            margin-bottom: 20px;
+        }
+
+        .policy-ul li {
+            margin-bottom: 10px;
+            line-height: 1.65;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 14px;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            background: #0f172a;
+        }
+
+        .policy-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .policy-table th {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            padding: 14px 18px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .policy-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            color: #cbd5e1;
+            vertical-align: top;
+        }
+
+        .policy-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .policy-link {
+            color: #38bdf8;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color 0.2s ease;
+        }
+
+        .policy-link:hover {
+            color: #fed6e3;
+        }
+
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 2px 7px;
+            border-radius: 6px;
+            font-size: 0.88em;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        .policy-footer-nav {
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
     </style>
 </head>
 <body>
@@ -102,17 +314,141 @@
 
     <div id="app-modal" class="modal" onclick="closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close-btn" onclick="closeModal()" title="Close (Esc)">&times;</button>
             <div id="modal-body"></div>
         </div>
     </div>
 
     <script>
+        const REMIND_ME_PRIVACY_MD = `# Privacy Policy for RemindMe
+
+**Last updated:** 14 September 2026
+
+RemindMe is provided by **Peak Geek Ltd**, trading as **Mettle & Mind Lab** ("we", "us", "our"), based in Sheffield, United Kingdom. This policy explains what information RemindMe collects, why, and how it is protected. It applies to the RemindMe app on iPhone and iPad, and to any related setup or account services.
+
+If you have questions about this policy, contact us at **support@mettleandmindlab.com**.
+
+---
+
+## 1. The short version
+
+- RemindMe is built so that the content you and your family create — photos, messages, reminders, calendar entries — is **stored in your own Apple iCloud account via CloudKit**, and is only ever visible to the admin's Apple ID and to the family members they specifically invite. We do not have access to it, and neither does anyone else.
+- We never store your password. Sign-in is handled securely through our Azure-based identity service.
+- The only personal information we hold ourselves is your **email address and display name**, so we can manage your account, keep your subscription and family members working across our apps, and let you know about relevant updates.
+- RemindMe does not sell your data, and does not use advertising or tracking SDKs.
+
+The sections below explain this in full detail.
+
+---
+
+## 2. Who we are
+
+RemindMe is developed and operated by Peak Geek Ltd, trading as Mettle & Mind Lab, a UK-based software developer. For the purposes of UK GDPR and the Data Protection Act 2018, we are the **data controller** for the account information described in Section 3, and a **data processor** with no access to the content you store via CloudKit, described in Section 4.
+
+## 3. Information we collect and manage ourselves
+
+To create and manage your RemindMe account, we store the following in our own secure database, hosted on Microsoft Azure:
+
+- **Email address**
+- **Display name / username**
+
+We collect this because RemindMe is one app in a small family of tools ("Me Suite") from Mettle & Mind Lab, and this lets us:
+
+- Identify your account and link it to your subscription entitlement
+- Recognise you if you use more than one of our apps, so your account can be managed consistently
+- Let secondary family members join a shared household under a primary subscriber's entitlement
+- Send you service-related messages (for example, trial or subscription notices) and, where relevant, news about features or other Mettle & Mind Lab tools
+
+We do **not** store your password. Authentication is handled by our identity provider (Microsoft Entra External ID) and verified through our Azure backend — your password never passes through or is retained by the RemindMe app itself, and we do not have access to it in plain form.
+
+We do not collect payment card details. Subscription purchases are handled entirely by Apple through StoreKit / the App Store, under Apple's own privacy and payment terms.
+
+## 4. Information stored in your iCloud account (CloudKit)
+
+RemindMe's core content — reminders, calendar entries, messages, photos, voice recordings, and the paired iPad's status information — is stored using Apple's CloudKit, inside the admin's own private iCloud account.
+
+This means:
+
+- This content is **not visible to us**, or to anyone else, unless the admin user chooses to invite them as a family member using Apple's own secure sharing (\`CKShare\`) — the same mechanism used for shared iCloud photo albums or notes.
+- We cannot read, access, or recover this content on your behalf, because we have no technical access to it. If you lose access to the admin's Apple ID (for example, by forgetting the associated Apple ID password) we cannot retrieve this data — only Apple, through their standard Apple ID account recovery process, can help.
+- Location information (used to show local weather and sunrise/sunset detail on the paired iPad) is requested from the device's own location services, and is stored and synced via CloudKit in the same private way — it is not sent to or stored by us.
+
+Because CloudKit data lives in your own iCloud account, its handling is also governed by **Apple's Privacy Policy** (available at apple.com/legal/privacy), which we encourage you to review.
+
+## 5. Third parties we rely on
+
+We use a small number of trusted service providers to run RemindMe. None of them are permitted to use your information for their own purposes.
+
+| Provider | What they do for us | What they may process |
+|---|---|---|
+| **Apple** | CloudKit sync, iCloud storage, App Store purchases and subscriptions, push notifications | Content you store via CloudKit; purchase and subscription status |
+| **Microsoft Azure** | Hosts our backend (Azure Functions), our account database, and identity/sign-in (Microsoft Entra External ID) | Email address, display name, sign-in credentials (held by Microsoft, not by us), subscription entitlement status |
+| **Azure Communication Services** | Sends account-related emails (e.g. trial expiry notices) | Email address, message content |
+
+We do not use third-party advertising networks, analytics SDKs, or tracking tools in RemindMe.
+
+## 6. Why we process your information — legal basis
+
+Under UK GDPR, we rely on the following legal bases:
+
+- **Performance of a contract** — to create your account, run your subscription/trial, and provide the app's core functionality.
+- **Legitimate interests** — to keep our small suite of apps working consistently for users across them, and to maintain the security and reliability of the service.
+- **Consent** — where we ask permission for anything beyond what's needed to run the service (for example, optional news about new features).
+
+## 7. Data retention
+
+We keep your account information (email and display name) for as long as your account is active. If you delete your account, we delete this information within a reasonable period, except where we're required to keep limited records for legal, accounting, or fraud-prevention purposes.
+
+Content stored via CloudKit remains under your control at all times, in your own iCloud account, and is governed by your own iCloud storage and retention settings — not ours.
+
+## 8. Your rights
+
+Under UK GDPR, you have the right to:
+
+- Access the personal information we hold about you
+- Correct inaccurate information
+- Request deletion of your account and associated information
+- Restrict or object to certain processing
+- Receive a copy of your data in a portable format
+- Withdraw consent at any time, where processing is based on consent
+
+To exercise any of these rights, email **support@mettleandmindlab.com**. You can also delete your RemindMe account directly within the app.
+
+If you're not satisfied with our response, you have the right to complain to the UK Information Commissioner's Office (ICO) at ico.org.uk.
+
+## 9. Children and vulnerable users
+
+RemindMe is designed to be *used by* people living with dementia, on a device set up and managed on their behalf by a family admin. RemindMe is not directed at children, and account registration is intended for adult family members acting as the admin. We do not knowingly collect account information directly from children.
+
+## 10. International data transfers
+
+Our account database and backend are hosted on Microsoft Azure infrastructure; Apple's CloudKit and App Store services operate their own global infrastructure. Where information is transferred outside the UK, our providers maintain appropriate safeguards (such as Standard Contractual Clauses) as required under UK GDPR.
+
+## 11. Security
+
+We use industry-standard measures to protect the information we hold, including encrypted connections (HTTPS/TLS), secure credential storage via Azure Key Vault, and authentication through Microsoft's Entra identity platform rather than storing passwords ourselves. Content synced via CloudKit benefits from Apple's own iCloud encryption and security model.
+
+No system can be guaranteed 100% secure, but we take reasonable steps to protect your information against unauthorised access, loss, or misuse.
+
+## 12. Changes to this policy
+
+We may update this policy from time to time, for example as RemindMe's features evolve. We'll update the "Last updated" date above when we do. Significant changes will be highlighted within the app or by email where appropriate.
+
+## 13. Contact us
+
+Questions, requests, or concerns about this policy or your data:
+
+**Email:** support@mettleandmindlab.com
+**Company:** Peak Geek Ltd, trading as Mettle & Mind Lab
+**Location:** Sheffield, United Kingdom`;
+
         const appData = [
             { 
                 name: "MML - RemindMe", 
                 group: "longevity", 
                 price: "£4.99", 
                 image: "images/RemindMeCard.png", 
+                privacyPolicy: "RemindMe_Privacy_Policy.md",
                 desc: "Do you have an iPhone and an unused iPad? Create a dedicated care point and a link between you and a loved one.",
                 extendedDesc: `
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
@@ -157,6 +493,7 @@
             { name: "MML - AnalyzeMe - Gymnastics", group: "performance", price: "£49.99", desc: "Precision feedback." }
         ];
 
+        let currentActiveApp = null;
         const grid = document.getElementById('app-grid');
 
         appData.forEach(app => {
@@ -173,7 +510,130 @@
             grid.appendChild(card);
         });
 
+        function formatInlineMarkdown(str) {
+            return str
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/`(.+?)`/g, '<code>$1</code>')
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="policy-link">$1</a>')
+                .replace(/\b([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\b/g, '<a href="mailto:$1" class="policy-link">$1</a>')
+                .replace(/\b(ico\.org\.uk|apple\.com\/legal\/privacy)\b/g, '<a href="https://$1" target="_blank" rel="noopener noreferrer" class="policy-link">$1</a>');
+        }
+
+        function parseMarkdownToHtml(md) {
+            const lines = md.trim().split(/\r?\n/);
+            let html = '';
+            let inList = false;
+            let inTable = false;
+            let tableHeader = [];
+            let tableBody = [];
+
+            function flushList() {
+                if (inList) {
+                    html += '</ul>';
+                    inList = false;
+                }
+            }
+
+            function flushTable() {
+                if (inTable) {
+                    html += '<div class="table-container"><table class="policy-table">';
+                    if (tableHeader.length > 0) {
+                        html += '<thead><tr>';
+                        tableHeader.forEach(cell => {
+                            html += `<th>${formatInlineMarkdown(cell.trim())}</th>`;
+                        });
+                        html += '</tr></thead>';
+                    }
+                    if (tableBody.length > 0) {
+                        html += '<tbody>';
+                        tableBody.forEach(row => {
+                            html += '<tr>';
+                            row.forEach(cell => {
+                                html += `<td>${formatInlineMarkdown(cell.trim())}</td>`;
+                            });
+                            html += '</tr>';
+                        });
+                        html += '</tbody>';
+                    }
+                    html += '</table></div>';
+                    tableHeader = [];
+                    tableBody = [];
+                    inTable = false;
+                }
+            }
+
+            for (let i = 0; i < lines.length; i++) {
+                const rawLine = lines[i];
+                const trimmed = rawLine.trim();
+
+                if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+                    flushList();
+                    const cells = trimmed.split('|').slice(1, -1);
+                    if (!inTable) {
+                        inTable = true;
+                        tableHeader = cells;
+                    } else {
+                        const isDivider = cells.every(c => /^[\s-:]+$/.test(c));
+                        if (!isDivider) {
+                            tableBody.push(cells);
+                        }
+                    }
+                    continue;
+                } else if (inTable) {
+                    flushTable();
+                }
+
+                if (trimmed === '') {
+                    flushList();
+                    continue;
+                }
+
+                if (trimmed === '---' || trimmed === '***' || trimmed === '___') {
+                    flushList();
+                    html += '<hr class="policy-hr">';
+                    continue;
+                }
+
+                if (trimmed.startsWith('# ')) {
+                    flushList();
+                    html += `<h1 class="policy-h1">${formatInlineMarkdown(trimmed.substring(2))}</h1>`;
+                    continue;
+                }
+
+                if (trimmed.startsWith('## ')) {
+                    flushList();
+                    html += `<h2 class="policy-h2">${formatInlineMarkdown(trimmed.substring(3))}</h2>`;
+                    continue;
+                }
+
+                if (trimmed.startsWith('### ')) {
+                    flushList();
+                    html += `<h3 class="policy-h3">${formatInlineMarkdown(trimmed.substring(4))}</h3>`;
+                    continue;
+                }
+
+                if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+                    if (!inList) {
+                        html += '<ul class="policy-ul">';
+                        inList = true;
+                    }
+                    html += `<li>${formatInlineMarkdown(trimmed.substring(2))}</li>`;
+                    continue;
+                }
+
+                flushList();
+                html += `<p class="policy-p">${formatInlineMarkdown(trimmed)}</p>`;
+            }
+
+            flushList();
+            flushTable();
+
+            return html;
+        }
+
         function openModal(app) {
+            currentActiveApp = app;
             const modal = document.getElementById('app-modal');
             const body = document.getElementById('modal-body');
             body.innerHTML = `
@@ -188,15 +648,90 @@
                 <div class="desc-sub">${app.extendedDesc || "<p>Coming soon to the Me-Suite ecosystem.</p>"}</div>
                 <button class="buy-btn">View on App Store</button>
                 <div class="legal-footer">
-                    <a href="#" class="legal-link">Privacy Policy</a>
-                    <a href="#" class="legal-link">Terms of Service</a>
-                    <a href="#" class="legal-link">EULA</a>
+                    <a href="javascript:void(0)" onclick="openPrivacyPolicy('${app.name}')" class="legal-link">Privacy Policy</a>
+                    <a href="javascript:void(0)" class="legal-link">Terms of Service</a>
+                    <a href="javascript:void(0)" class="legal-link">EULA</a>
                 </div>
             `;
             modal.style.display = "block";
+            document.querySelector('.modal-content').scrollTop = 0;
         }
 
-        function closeModal() { document.getElementById('app-modal').style.display = "none"; }
+        async function openPrivacyPolicy(appName) {
+            const app = appData.find(a => a.name === appName) || currentActiveApp || appData[0];
+            const modal = document.getElementById('app-modal');
+            const body = document.getElementById('modal-body');
+
+            if (app.privacyPolicy || app.name.includes("RemindMe")) {
+                let markdownContent = REMIND_ME_PRIVACY_MD;
+                
+                // Attempt to fetch file dynamically if hosted on web server, otherwise fallback to embedded copy
+                try {
+                    const response = await fetch('RemindMe_Privacy_Policy.md');
+                    if (response.ok) {
+                        const fetchedText = await response.text();
+                        if (fetchedText && fetchedText.length > 50) {
+                            markdownContent = fetchedText;
+                        }
+                    }
+                } catch (e) {
+                    // Fallback to REMIND_ME_PRIVACY_MD for local file:// access
+                }
+
+                const renderedHtml = parseMarkdownToHtml(markdownContent);
+
+                body.innerHTML = `
+                    <div class="policy-nav-bar">
+                        <button class="policy-back-btn" onclick="openModal(currentActiveApp || appData[0])">
+                            <span>&#8592;</span> Back to ${app.name}
+                        </button>
+                        <div class="policy-actions">
+                            <a href="RemindMe_Privacy_Policy.md" target="_blank" class="policy-action-btn" title="View or download raw markdown file">
+                                <span>&#128196;</span> Raw .md
+                            </a>
+                        </div>
+                    </div>
+                    <div class="policy-body">
+                        ${renderedHtml}
+                    </div>
+                    <div class="policy-footer-nav">
+                        <button class="policy-back-btn" onclick="openModal(currentActiveApp || appData[0])">
+                            <span>&#8592;</span> Back to ${app.name}
+                        </button>
+                        <button class="policy-action-btn" onclick="document.querySelector('.modal-content').scrollTo({top: 0, behavior: 'smooth'})">
+                            <span>&#8593;</span> Back to top
+                        </button>
+                    </div>
+                `;
+            } else {
+                body.innerHTML = `
+                    <div class="policy-nav-bar">
+                        <button class="policy-back-btn" onclick="openModal(currentActiveApp || appData[0])">
+                            <span>&#8592;</span> Back to ${app.name}
+                        </button>
+                    </div>
+                    <div class="policy-body" style="text-align: center; padding: 40px 20px;">
+                        <h2 class="policy-h2" style="border: none;">${app.name} Privacy Policy</h2>
+                        <p class="policy-p">The privacy policy for <strong>${app.name}</strong> will be published prior to general release on the App Store.</p>
+                        <p class="policy-p">All Mettle & Mind Lab applications are built with privacy-first architecture, local on-device processing, and private iCloud CloudKit synchronization.</p>
+                        <p class="policy-p" style="margin-top: 25px;">For inquiries, contact <a href="mailto:support@mettleandmindlab.com" class="policy-link">support@mettleandmindlab.com</a></p>
+                    </div>
+                `;
+            }
+
+            modal.style.display = "block";
+            document.querySelector('.modal-content').scrollTop = 0;
+        }
+
+        function closeModal() { 
+            document.getElementById('app-modal').style.display = "none"; 
+        }
+
+        window.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
