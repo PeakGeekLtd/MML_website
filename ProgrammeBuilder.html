@@ -1,0 +1,1841 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Programme Builder – Prototype</title>
+  <style>
+    html,body{height:100%;margin:0;font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:#1a1a2e;background:#f0f2f5}
+    .app{display:grid;grid-template-columns:30% 35% 35%;height:100vh;gap:16px;padding:16px;box-sizing:border-box}
+    .panel{background:linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);border-radius:12px;box-shadow:0 8px 32px rgba(31, 38, 135, 0.15);padding:20px;overflow:auto;border:1px solid rgba(255,255,255,0.8)}
+    h2{margin:0 0 16px 0;font-size:18px;font-weight:700;color:#2d3561;letter-spacing:-0.5px}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+    button{padding:10px 16px;border-radius:8px;border:none;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:#fff;cursor:pointer;font-weight:600;font-size:14px;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(102, 126, 234, 0.3)}
+    button:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102, 126, 234, 0.4)}
+    button:active{transform:translateY(0)}
+    #btn-select-folder{background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%);box-shadow:0 4px 12px rgba(245, 87, 108, 0.3)}
+    #btn-select-folder:hover{box-shadow:0 6px 20px rgba(245, 87, 108, 0.4)}
+    #btn-help{background:linear-gradient(135deg, #43cea2 0%, #1e9e5a 100%);box-shadow:0 4px 12px rgba(30, 158, 90, 0.3)}
+    #btn-help:hover{box-shadow:0 6px 20px rgba(30, 158, 90, 0.4)}
+    input[type=text],select,textarea{width:100%;padding:10px 12px;border-radius:8px;border:2px solid #e1e8ed;box-sizing:border-box;font-size:14px;transition:all 0.3s ease;background:#fff}
+    input[type=text]:focus,select:focus,textarea:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102, 126, 234, 0.1)}
+    .list{border:2px dashed #e1e8ed;padding:12px;border-radius:10px;min-height:40px;background:#fafbfc}
+    .exercise-line{display:flex;gap:8px;align-items:center;padding:6px;border-radius:6px}
+    .exercise-line.active{background:#f0f4ff}
+    .col-label{font-weight:700;margin-bottom:8px;color:#2d3561;font-size:13px;text-transform:uppercase;letter-spacing:0.5px}
+    .workout-list{display:flex;flex-direction:column;gap:8px}
+    .workout-item{padding:12px 16px;border-radius:10px;border:2px solid #e1e8ed;cursor:pointer;background:#fff;transition:all 0.25s ease;font-weight:500;display:flex;justify-content:space-between;align-items:center}
+    .workout-item:hover{border-color:#667eea;transform:translateX(4px);box-shadow:0 4px 12px rgba(102, 126, 234, 0.15)}
+    .workout-item.active{border-color:#667eea;background:linear-gradient(135deg, #667eea15 0%, #764ba215 100%);box-shadow:0 4px 16px rgba(102, 126, 234, 0.2)}
+    .workout-name{flex:1}
+    .workout-icons{display:flex;gap:8px;opacity:0.5;transition:opacity 0.2s ease}
+    .workout-item:hover .workout-icons{opacity:1}
+    .workout-icon{padding:4px 6px;border-radius:4px;transition:all 0.2s ease;font-size:14px}
+    .workout-icon:hover{background:rgba(102, 126, 234, 0.15);transform:scale(1.1)}
+    .three-rows{display:grid;grid-template-rows:1fr 1fr 1fr;gap:12px;height:calc(100% - 40px)}
+    .list-toolbar{display:flex;gap:8px;margin-top:8px}
+    .program-preview{white-space:pre-wrap;font-family:'SF Mono','Monaco','Consolas',monospace;font-size:13px;line-height:1.6;color:#4a5568}
+    .flex{display:flex;align-items:center;gap:8px}
+    .small{font-size:12px;padding:6px 10px;box-shadow:0 2px 8px rgba(102, 126, 234, 0.2)}
+    .modal{position:fixed;inset:0;background:rgba(26, 26, 46, 0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:1000}
+    .modal-card{background:#fff;padding:24px;border-radius:16px;width:400px;max-width:92%;box-shadow:0 20px 60px rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.8)}
+    .modal-card.wide{width:500px}
+    .modal-header{font-size:20px;font-weight:700;margin-bottom:20px;color:#2d3561}
+    .modal-buttons{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+    .btn-primary{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:#fff;border:none;box-shadow:0 4px 12px rgba(102, 126, 234, 0.4)}
+    .btn-primary:hover{box-shadow:0 6px 20px rgba(102, 126, 234, 0.5);transform:translateY(-2px)}
+    .btn-secondary{background:linear-gradient(135deg, #6c757d 0%, #495057 100%);color:#fff;border:none}
+    .btn-secondary:hover{background:linear-gradient(135deg, #5a6268 0%, #343a40 100%)}
+    .row{display:flex;gap:8px}
+    .muted{color:#6c757d;font-size:13px}
+    hr{border:none;border-top:1px solid #e1e8ed;margin:16px 0}
+    .form-group{margin-bottom:16px}
+    .form-label{display:block;font-weight:600;margin-bottom:8px;font-size:14px;color:#2d3561}
+    .video-list{max-height:300px;overflow-y:auto;border:2px solid #e1e8ed;border-radius:10px;margin-top:8px;background:#fafbfc}
+    .video-item{padding:12px 16px;cursor:pointer;border-bottom:1px solid #e1e8ed;transition:all 0.2s ease;font-weight:500}
+    .video-item:hover{background:linear-gradient(90deg, #667eea10 0%, #764ba210 100%)}
+    .video-item.selected{background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:#fff;border-left:4px solid #fff;font-weight:600}
+    .video-item:last-child{border-bottom:none}
+    .exercise-display{padding:12px;background:#fff;border-radius:10px;margin-bottom:8px;cursor:pointer;border:2px solid #e1e8ed;transition:all 0.25s ease;box-shadow:0 2px 8px rgba(0,0,0,0.05);display:flex;justify-content:space-between;align-items:center}
+    .exercise-display:hover{border-color:#667eea;transform:translateX(4px);box-shadow:0 4px 12px rgba(102, 126, 234, 0.15)}
+    .exercise-display.active{background:linear-gradient(135deg, #ffeaa715 0%, #f5576c15 100%);border-color:#f5576c;box-shadow:0 4px 16px rgba(245, 87, 108, 0.2)}
+    .exercise-content{flex:1}
+    .exercise-edit-icon{font-size:16px;opacity:0.5;transition:all 0.2s ease;padding:4px 8px;border-radius:6px}
+    .exercise-edit-icon:hover{opacity:1;background:rgba(102, 126, 234, 0.1);transform:scale(1.1)}
+    .exercise-title{font-weight:700;margin-bottom:6px;color:#2d3561;font-size:14px}
+    .exercise-detail{font-size:12px;color:#6c757d;margin-bottom:2px}
+    #folder-status{background:linear-gradient(135deg, #667eea15 0%, #764ba215 100%);border:2px solid #667eea;border-radius:10px;padding:12px;margin-top:12px;font-weight:600;color:#2d3561}
+    #meta-view{font-weight:600;color:#2d3561;font-size:14px;padding:8px 0;border-bottom:2px solid #e1e8ed}
+    .app-title{font-size:24px;font-weight:800;color:#2d3561;margin-bottom:20px;text-align:center;letter-spacing:-0.5px;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    button:disabled,input:disabled,select:disabled,textarea:disabled{opacity:0.45;cursor:not-allowed;box-shadow:none}
+    button:disabled:hover,button:disabled:active{transform:none;box-shadow:none}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="panel" id="left-panel">
+      <div class="app-title">Workout Builder - Nov 2026</div>
+      
+      <div class="controls">
+        <button id="btn-select-folder">Select PBData Folder</button>
+        <button id="btn-new">New Programme</button>
+        <button id="btn-load">Load Programme</button>
+        <button id="btn-save">Save Programme</button>
+        <button id="btn-delete-programme" style="background:linear-gradient(135deg, #f5576c 0%, #d63031 100%)">Delete Programme</button>
+        <button id="btn-publish">Publish (mark users)</button>
+        <button id="btn-help">Help guide</button>
+      </div>
+      
+      <div id="folder-status" class="muted" style="margin-top:8px;padding:8px;background:#f0f8ff;border-radius:4px;display:none">
+        📁 <span id="folder-name">No folder selected</span>
+      </div>
+
+      <hr />
+
+      <div>
+        <div class="col-label">Level (1–12)</div>
+        <select id="level-select"></select>
+      </div>
+
+      <div style="margin-top:8px">
+        <div class="col-label">Programme Type</div>
+        <select id="type-select">
+          <option>Strength</option>
+          <option>Speed</option>
+          <option>Power</option>
+          <option>Endurance</option>
+          <option>Fat Loss</option>
+        </select>
+      </div>
+
+      <div style="margin-top:8px">
+        <div class="col-label">Programme name</div>
+        <input id="programme-name" type="text" placeholder="Week 1 Strength" />
+      </div>
+
+      <div style="margin-top:8px">
+        <div class="col-label">Description</div>
+        <textarea id="programme-description" rows="3" placeholder="Add a description for this programme..." style="resize:vertical;font-family:inherit"></textarea>
+      </div>
+
+      <div style="margin-top:8px">
+        <div class="col-label">Workouts</div>
+        <div class="workout-list" id="workout-list"></div>
+        <div class="list-toolbar">
+          <button id="add-workout" class="small">+ Add</button>
+          <button id="workout-up" class="small">↑</button>
+          <button id="workout-down" class="small">↓</button>
+          <button id="del-workout" class="small">Delete</button>
+          <button id="rename-workout" class="small">Rename</button>
+        </div>
+      </div>
+
+      <hr />
+
+      <div>
+        <div class="col-label">Recipients (users.json)</div>
+        <div id="recipients" class="list" style="min-height:80px"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="middle-panel">
+      <h2>Workout Editor</h2>
+      <div id="no-workout-msg" class="muted" style="text-align:center;padding:40px 20px">
+        Create or select a workout to begin editing
+      </div>
+      <div class="three-rows" id="editor-rows" style="display:none">
+        <div>
+          <div class="col-label">Warm up</div>
+          <div id="wu-list" class="list"></div>
+          <div class="list-toolbar">
+            <button id="wu-add">+ Add</button>
+            <button id="wu-up">↑</button>
+            <button id="wu-down">↓</button>
+            <button id="wu-del">Delete</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="col-label">Main theme</div>
+          <div id="mt-list" class="list"></div>
+          <div class="list-toolbar">
+            <button id="mt-add">+ Add</button>
+            <button id="mt-up">↑</button>
+            <button id="mt-down">↓</button>
+            <button id="mt-del">Delete</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="col-label">Cool down</div>
+          <div id="cd-list" class="list"></div>
+          <div class="list-toolbar">
+            <button id="cd-add">+ Add</button>
+            <button id="cd-up">↑</button>
+            <button id="cd-down">↓</button>
+            <button id="cd-del">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="right-panel">
+      <h2>Programme Preview</h2>
+      <div class="muted" id="meta-view">No programme loaded</div>
+      <div style="height:12px"></div>
+      <div id="preview" class="program-preview"></div>
+    </div>
+  </div>
+
+  <!-- Rename Workout Modal -->
+  <div id="rename-modal" class="modal" style="display:none">
+    <div class="modal-card">
+      <div class="modal-header">Rename Workout</div>
+      <input type="text" id="rename-input" placeholder="Enter workout name" />
+      <div class="modal-buttons">
+        <button id="rename-cancel">Cancel</button>
+        <button id="rename-confirm" class="btn-primary">Rename</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Exercise Modal -->
+  <div id="exercise-modal" class="modal" style="display:none">
+    <div class="modal-card wide">
+      <div class="modal-header" id="exercise-modal-title">Add Exercise</div>
+      
+      <div class="form-group">
+        <label class="form-label">Choose exercise that has a demo video</label>
+        <button id="browse-video-btn" style="width:100%">Browse for Video...</button>
+        <div id="selected-video" class="muted" style="margin-top:8px">No video selected</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Describe exercise that has no accompanying video</label>
+        <input type="text" id="exercise-name" placeholder="e.g., Complex 1, Custom arm pyramid" />
+        <div class="muted" style="margin-top:6px">Fills in automatically when you select a video. For an exercise with no video, leave the video empty and type the name yourself.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Load</label>
+        <input type="text" id="exercise-load" placeholder="e.g., 20kg, bodyweight, resistance band" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Organization</label>
+        <input type="text" id="exercise-org" placeholder="e.g., 3 sets of 10, to failure, 30 secs x 3" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Coaching Point</label>
+        <input type="text" id="exercise-coaching" placeholder="e.g., slow down, fast up" />
+      </div>
+
+      <div class="modal-buttons">
+        <button id="exercise-cancel">Cancel</button>
+        <button id="exercise-confirm" class="btn-primary">Add Exercise</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Video Picker Modal -->
+  <div id="video-picker-modal" class="modal" style="display:none">
+    <div class="modal-card wide">
+      <div class="modal-header">Select Video</div>
+      
+      <div class="form-group" style="margin-bottom:12px">
+        <input type="text" id="video-search" placeholder="Search exercises..." style="margin-bottom:8px" />
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer">
+            <input type="checkbox" id="filter-barbell" class="equipment-filter" value="barbell" />
+            <span>Barbell</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer">
+            <input type="checkbox" id="filter-dumbbell" class="equipment-filter" value="dumbbell" />
+            <span>Dumbbell</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer">
+            <input type="checkbox" id="filter-band" class="equipment-filter" value="band" />
+            <span>Band</span>
+          </label>
+        </div>
+      </div>
+      
+      <div id="video-picker-list" class="video-list"></div>
+      <div class="modal-buttons">
+        <button id="video-picker-cancel">Cancel</button>
+        <button id="video-picker-confirm" class="btn-primary">Select</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Programme Picker Modal -->
+  <div id="programme-picker-modal" class="modal" style="display:none">
+    <div class="modal-card">
+      <div class="modal-header">Load Programme</div>
+      <div id="programme-picker-list" class="video-list"></div>
+      <div class="modal-buttons">
+        <button id="programme-picker-cancel">Cancel</button>
+        <button id="programme-picker-confirm" class="btn-primary">Load</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Programme unavailable message -->
+  <div id="delete-unavailable-modal" class="modal" style="display:none">
+    <div class="modal-card">
+      <div class="modal-header">Delete Programme</div>
+      <div>Programme deletion is currently only available via the Azure portal.</div>
+      <div class="modal-buttons">
+        <button id="delete-unavailable-close" class="btn-primary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Programme Modal -->
+  <div id="delete-programme-modal" class="modal" style="display:none">
+    <div class="modal-card">
+      <div class="modal-header">Delete Programme</div>
+      <div id="delete-programme-list" class="video-list"></div>
+      <div class="modal-buttons">
+        <button id="delete-programme-cancel">Cancel</button>
+        <button id="delete-programme-confirm" style="background:linear-gradient(135deg, #f5576c 0%, #d63031 100%);color:#fff;border:none">Delete Selected</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help guide: opened in a new tab by the "Help guide" button -->
+  <script type="text/html" id="help-template">
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Workout Builder – Help Guide</title>
+  <style>
+    html{scroll-behavior:smooth}
+    body{margin:0;background:#f0f2f5;color:#1a1a2e;font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.6;font-size:16px}
+    .wrap{max-width:860px;margin:0 auto;padding:32px 20px 80px}
+    header{text-align:center;margin-bottom:28px}
+    h1{font-size:30px;margin:0 0 6px 0;color:#2d3561;letter-spacing:-0.5px}
+    .sub{color:#6c757d;margin:0}
+    .card{background:#fff;border-radius:12px;box-shadow:0 8px 32px rgba(31,38,135,0.12);padding:24px 28px;margin-bottom:20px}
+    h2{font-size:22px;color:#2d3561;margin:0 0 12px 0;padding-top:4px}
+    h3{font-size:17px;color:#2d3561;margin:22px 0 8px 0}
+    p{margin:0 0 12px 0}
+    ul,ol{margin:0 0 12px 0;padding-left:22px}
+    li{margin-bottom:6px}
+    a{color:#5a67d8}
+    .toc ol{columns:2;column-gap:32px;padding-left:22px}
+    .toc li{break-inside:avoid}
+    .btn{display:inline-block;padding:2px 10px;border-radius:6px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;font-weight:600;font-size:14px;white-space:nowrap}
+    .btn.red{background:linear-gradient(135deg,#f5576c 0%,#d63031 100%)}
+    .btn.grey{background:#adb5bd}
+    .label{font-weight:700;color:#2d3561}
+    .note,.warn,.tip{border-radius:10px;padding:12px 16px;margin:14px 0}
+    .tip{background:#eef7ee;border-left:5px solid #38a169}
+    .note{background:#eef2ff;border-left:5px solid #667eea}
+    .warn{background:#fff4e5;border-left:5px solid #ed8936}
+    .note b,.warn b,.tip b{display:block;margin-bottom:2px}
+    table{border-collapse:collapse;width:100%;margin:8px 0 14px 0;font-size:15px}
+    th,td{border:1px solid #e1e8ed;padding:8px 10px;text-align:left;vertical-align:top}
+    th{background:#f4f6fb;color:#2d3561}
+    code{background:#f4f6fb;border-radius:4px;padding:1px 6px;font-size:14px}
+    .top{font-size:13px;margin-top:14px;text-align:right}
+    @media (max-width:640px){.toc ol{columns:1}.card{padding:18px}}
+    @media print{body{background:#fff}.card{box-shadow:none;border:1px solid #ddd;page-break-inside:avoid}.top{display:none}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Workout Builder – Help Guide</h1>
+    <p class="sub">How to create a training programme and save it to Azure, step by step.</p>
+  </header>
+
+  <div class="card toc" id="top">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#before">Before you start</a></li>
+      <li><a href="#screen">The screen at a glance</a></li>
+      <li><a href="#quickstart">Quick start: your first programme</a></li>
+      <li><a href="#begin">Starting: New or Load</a></li>
+      <li><a href="#details">Programme details</a></li>
+      <li><a href="#workouts">Workouts</a></li>
+      <li><a href="#exercises">Adding an exercise</a></li>
+      <li><a href="#editing">Editing, moving and deleting exercises</a></li>
+      <li><a href="#preview">Checking your work (Programme Preview)</a></li>
+      <li><a href="#saving">Saving to Azure</a></li>
+      <li><a href="#loading">Loading and deleting saved programmes</a></li>
+      <li><a href="#publish">Publish and Recipients</a></li>
+      <li><a href="#careful">Important things to know</a></li>
+      <li><a href="#trouble">Troubleshooting</a></li>
+    </ol>
+  </div>
+
+  <div class="card" id="before">
+    <h2>1. Before you start</h2>
+    <ul>
+      <li>You need an internet connection. Programmes are saved to, and loaded from, Azure (the online storage the PT Me app uses). Nothing is saved on your own computer.</li>
+      <li>Leave the page open while you work. If you close or refresh it, anything you haven't saved is lost.</li>
+      <li>The exercises you can choose from come from a list of demo videos that has already been set up for you. If a video you expect is missing, see <a href="#trouble">Troubleshooting</a>.</li>
+      <li>You do not need to use the <span class="btn">Select PBData Folder</span> button (if you can see it). Ignore it.</li>
+    </ul>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="screen">
+    <h2>2. The screen at a glance</h2>
+    <p>The page has three columns.</p>
+    <table>
+      <tr><th style="width:26%">Column</th><th>What it is for</th></tr>
+      <tr><td class="label">Left</td><td>The buttons for starting, loading, saving and deleting, plus the programme's details (level, type, name, description) and its list of workouts.</td></tr>
+      <tr><td class="label">Middle: Workout Editor</td><td>Where you build the selected workout. It has three sections: <b>Warm up</b>, <b>Main theme</b> and <b>Cool down</b>.</td></tr>
+      <tr><td class="label">Right: Programme Preview</td><td>A plain-text summary of the whole programme, updating as you work. Use it to check everything reads correctly.</td></tr>
+    </table>
+    <div class="note"><b>Greyed-out buttons and boxes</b>Many controls are faded until you've started a programme (see <a href="#begin">Starting: New or Load</a>). That's normal. <span class="btn">Publish</span> stays faded until the programme contains at least one exercise.</div>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="quickstart">
+    <h2>3. Quick start: your first programme</h2>
+    <p>This is the whole job from start to finish. Each step is explained in more detail in the sections after it.</p>
+    <ol>
+      <li>Click <span class="btn">New Programme</span>, type a name (for example <code>Week 1 Strength</code>) and click OK.</li>
+      <li>On the left, choose the <b>Level</b> (1–12) and <b>Programme Type</b>, and add a <b>Description</b> if you wish.</li>
+      <li>A first workout, <b>Workout 1</b>, is created for you. Click <span class="btn">Rename</span> if you want a different name.</li>
+      <li>In the middle column, under <b>Warm up</b>, click <span class="btn">+ Add</span>.</li>
+      <li>Click <span class="btn">Browse for Video...</span>, search for the exercise, click it, then click <span class="btn">Select</span>.</li>
+      <li>Fill in <b>Load</b>, <b>Organization</b> and <b>Coaching Point</b>, then click <span class="btn">Add Exercise</span>.</li>
+      <li>Repeat steps 4–6 to build up <b>Warm up</b>, <b>Main theme</b> and <b>Cool down</b>.</li>
+      <li>Add more workouts with <span class="btn">+ Add</span> in the Workouts list (or copy one with the 📋 icon) and fill them in the same way.</li>
+      <li>Read through the <b>Programme Preview</b> on the right to check it.</li>
+      <li>Click <span class="btn">Save Programme</span>. Wait for the message <code>Saved to ptme-admin-programmes/…</code>. You're done.</li>
+    </ol>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="begin">
+    <h2>4. Starting: New or Load</h2>
+    <p>When the page first opens, most of the screen is greyed out. You have to either start a new programme or open a saved one.</p>
+
+    <h3>Start a new programme</h3>
+    <ol>
+      <li>Click <span class="btn">New Programme</span>.</li>
+      <li>A small box asks for the programme name. Type it and click OK. (You can change it later.)</li>
+      <li>The programme is created with one empty workout called <b>Workout 1</b>, and all the left-hand boxes become usable.</li>
+    </ol>
+
+    <h3>Open a saved programme</h3>
+    <ol>
+      <li>Click <span class="btn">Load Programme</span>.</li>
+      <li>A list of every saved programme in Azure appears. Click the one you want (it turns purple).</li>
+      <li>Click <span class="btn">Load</span>. A message confirms <code>Loaded: …</code>.</li>
+    </ol>
+    <div class="warn"><b>Careful</b>Starting a new programme or loading another one replaces whatever is on screen, and it does <u>not</u> ask whether you want to save first. Save your work before you do either.</div>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="details">
+    <h2>5. Programme details</h2>
+    <p>These are in the left column, under the buttons.</p>
+    <table>
+      <tr><th style="width:26%">Box</th><th>What to enter</th></tr>
+      <tr><td class="label">Level (1–12)</td><td>The PT Me level this programme is for.</td></tr>
+      <tr><td class="label">Programme Type</td><td>Choose one: Strength, Speed, Power, Endurance or Fat Loss.</td></tr>
+      <tr><td class="label">Programme name</td><td>The name of the programme, for example <code>Week 1 Strength</code>.</td></tr>
+      <tr><td class="label">Description</td><td>A short description of the programme. Optional, but helpful.</td></tr>
+    </table>
+    <p>Changes appear in the Programme Preview straight away.</p>
+    <div class="note"><b>About the saved file name</b>The first time you save, the file is named automatically from the date, name, level and type, for example <code>2026-11-05_Week-1-Strength_Level3_Strength.json</code>. If you change the name, level or type <u>after</u> the first save, the file keeps its original name. The new details are still saved inside it. See <a href="#saving">Saving to Azure</a>.</div>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="workouts">
+    <h2>6. Workouts</h2>
+    <p>A programme is made up of workouts. They are listed in the left column under <b>Workouts</b>. The workout with the coloured outline is the one you're currently editing in the middle column.</p>
+
+    <h3>Select a workout</h3>
+    <p>Click its name. The middle column changes to show that workout.</p>
+
+    <h3>Add a workout</h3>
+    <p>Click <span class="btn">+ Add</span> under the Workouts list. It is named <b>Workout 2</b>, <b>Workout 3</b> and so on, and is selected straight away.</p>
+
+    <h3>Rename a workout</h3>
+    <p>Select it and click <span class="btn">Rename</span>, or hover over it and click the ✏️ icon. Type the new name and click <span class="btn">Rename</span> (or press Enter).</p>
+
+    <h3>Copy a workout</h3>
+    <p>Hover over the workout and click the 📋 icon. An identical copy named <b>… (Copy)</b> is placed straight after it. This is the quickest way to build similar workouts: copy one, then change the exercises that differ.</p>
+
+    <h3>Change the order</h3>
+    <p>Select the workout, then use <span class="btn">↑</span> or <span class="btn">↓</span> to move it up or down the list.</p>
+
+    <h3>Delete a workout</h3>
+    <p>Select it and click <span class="btn">Delete</span>, or hover and click the 🗑️ icon. You'll be asked to confirm. This removes the workout and every exercise in it.</p>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="exercises">
+    <h2>7. Adding an exercise</h2>
+    <p>Each workout has three sections in the middle column: <b>Warm up</b>, <b>Main theme</b> and <b>Cool down</b>. Each has its own <span class="btn">+ Add</span> button. Click the one for the section you want to add to.</p>
+    <p>The <b>Add Exercise</b> box that opens has two ways to name the exercise. Use whichever fits.</p>
+
+    <h3>A. An exercise that has a demo video</h3>
+    <ol>
+      <li>Under <b>Choose exercise that has a demo video</b>, click <span class="btn">Browse for Video...</span>.</li>
+      <li>A list of videos appears. Type in the search box to narrow it down, or tick <b>Barbell</b>, <b>Dumbbell</b> or <b>Band</b> to show only exercises using that equipment.</li>
+      <li>Click the exercise you want (it turns purple), then click <span class="btn">Select</span>.</li>
+      <li>The exercise name fills in automatically, for example <b>Goblet Squat</b>. You can change the wording in the name box if you wish.</li>
+    </ol>
+    <div class="note"><b>Only the right videos are shown</b>Each section shows only its own videos: Warm up shows videos starting <code>wu_</code>, Main theme shows <code>mt_</code>, and Cool down shows <code>cd_</code>. If an exercise isn't in the list, check you're adding it to the right section.</div>
+    <div class="tip"><b>Search and tick-boxes are remembered</b>The picker remembers your last search and ticked boxes. If the list looks shorter than expected, check whether a search term or tick-box is still set from last time.</div>
+
+    <h3>B. A custom exercise with no video</h3>
+    <p>For something with no demo video, such as <i>Complex 1</i> or <i>Custom arm pyramid</i>:</p>
+    <ol>
+      <li>Leave the video part empty.</li>
+      <li>Under <b>Describe exercise that has no accompanying video</b>, type the name the athletes will recognise.</li>
+    </ol>
+    <p>You must give the exercise a name <u>or</u> pick a video. If you do neither, you'll be asked to.</p>
+
+    <h3>C. The three details (needed for every exercise)</h3>
+    <table>
+      <tr><th style="width:26%">Box</th><th>What to enter</th></tr>
+      <tr><td class="label">Load</td><td>What the athlete uses or lifts. For example <code>20kg</code>, <code>bodyweight</code>, <code>resistance band</code>.</td></tr>
+      <tr><td class="label">Organization</td><td>How the work is organised. For example <code>3 sets of 10</code>, <code>to failure</code>, <code>30 secs x 3</code>.</td></tr>
+      <tr><td class="label">Coaching Point</td><td>The key instruction for the athlete. For example <code>slow down, fast up</code>.</td></tr>
+    </table>
+    <p>All three must be filled in, or the exercise won't be added.</p>
+    <p>When you're ready, click <span class="btn">Add Exercise</span>. It appears at the bottom of that section's list. To leave without adding anything, click <span class="btn">Cancel</span>, or click on the dark area outside the box.</p>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="editing">
+    <h2>8. Editing, moving and deleting exercises</h2>
+    <p>Each exercise appears as a card showing its name, Load, Org (Organization) and CP (Coaching Point).</p>
+    <table>
+      <tr><th style="width:26%">To…</th><th>Do this</th></tr>
+      <tr><td class="label">Select an exercise</td><td>Click its card. It gets a pink outline. The <span class="btn">↑</span>, <span class="btn">↓</span> and <span class="btn">Delete</span> buttons under that section act on the selected exercise.</td></tr>
+      <tr><td class="label">Edit it</td><td>Click the ✏️ on the card, or double-click the card. Change anything, then click <span class="btn">Save Changes</span>.</td></tr>
+      <tr><td class="label">Change its video</td><td>Edit it, click <span class="btn">Browse for Video...</span> and choose another. The name updates automatically only if you hadn't typed your own name.</td></tr>
+      <tr><td class="label">Move it</td><td>Select it, then click <span class="btn">↑</span> or <span class="btn">↓</span>. Moves are within that section only.</td></tr>
+      <tr><td class="label">Delete it</td><td>Select it, then click <span class="btn">Delete</span> and confirm.</td></tr>
+    </table>
+    <div class="warn"><b>No undo, and no "remove video"</b>Deleted exercises and workouts can't be brought back. Also, once an exercise has a video you can swap it for another one but can't remove it. To make it a no-video exercise, delete it and add it again as a custom one.</div>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="preview">
+    <h2>9. Checking your work (Programme Preview)</h2>
+    <p>The right-hand column shows the whole programme as plain text: the programme details, then every workout with its Warm up, Main theme and Cool down exercises, each with its Load, Org and CP.</p>
+    <p>Read it through before you save. It's the best way to catch typos, missing exercises or a wrong level.</p>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="saving">
+    <h2>10. Saving to Azure</h2>
+    <ol>
+      <li>Click <span class="btn">Save Programme</span>.</li>
+      <li>Wait a moment. A message appears: <code>Saved to ptme-admin-programmes/&lt;file name&gt;</code>. If you don't see that message, it hasn't saved. See <a href="#trouble">Troubleshooting</a>.</li>
+    </ol>
+    <h3>New programmes and re-saving</h3>
+    <ul>
+      <li><b>First save of a new programme:</b> a new file is created, named from the date, programme name, level and type.</li>
+      <li><b>Saving a programme you loaded, or have already saved:</b> the same file is overwritten with your latest version. No duplicate is created.</li>
+    </ul>
+    <div class="warn"><b>Overwriting replaces the old version</b>There is no history, so you can't go back to an earlier version of a saved programme. If you want to keep the original while experimenting, ask for help to save a copy first.</div>
+    <div class="tip"><b>Save often</b>Save every few minutes while you're building a long programme, not just at the end.</div>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="loading">
+    <h2>11. Loading and deleting saved programmes</h2>
+    <h3>Loading</h3>
+    <p>See <a href="#begin">Starting: New or Load</a>. Once loaded, the programme can be edited and saved over the original.</p>
+    <h3>Deleting a saved programme</h3>
+    <p>Deleting can't be done from this tool at the moment. If you click the red <span class="btn red">Delete Programme</span> button, a message tells you that programme deletion is currently only available via the Azure portal.</p>
+    <p>To delete a programme, ask whoever manages the Azure storage. They remove the file from the <code>ptme-admin-programmes</code> container in the Azure portal.</p>
+    <div class="warn"><b>Permanent</b>Deleting a file from Azure can't be undone. Make sure the right file name is given.</div>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="publish">
+    <h2>12. Publish and Recipients</h2>
+    <p>The <span class="btn">Publish</span> button and the <b>Recipients</b> box at the bottom of the left column are not switched on yet. Clicking Publish does nothing for now.</p>
+    <p>Publish only becomes clickable once your programme has at least one exercise. For now, a saved programme is stored in Azure but isn't sent to any users from this tool.</p>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="careful">
+    <h2>13. Important things to know</h2>
+    <ul>
+      <li><b>No warning about unsaved work.</b> Starting a new programme, loading another, refreshing the page or closing the tab all discard your changes without asking.</li>
+      <li><b>No undo.</b> Deleting a workout, an exercise or a saved programme is final.</li>
+      <li><b>Saving overwrites.</b> Re-saving replaces the previous version in Azure.</li>
+      <li><b>Pop-up boxes need an answer.</b> Messages and confirmations appear as pop-ups at the top of the browser. Read them. They tell you whether something worked.</li>
+      <li><b>Clicking the dark area outside a box closes it</b> without saving what you typed in it.</li>
+      <li><b>Keep to the section.</b> Warm up, Main theme and Cool down only offer their own videos. Pick the section first.</li>
+    </ul>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+  <div class="card" id="trouble">
+    <h2>14. Troubleshooting</h2>
+    <table>
+      <tr><th style="width:34%">What you see</th><th>What to do</th></tr>
+      <tr><td>Most boxes and buttons are faded</td><td>Normal until you click <b>New Programme</b> or <b>Load Programme</b>.</td></tr>
+      <tr><td>"Select a workout first" or "Select a workout to…"</td><td>Click a workout's name in the left column, then try again.</td></tr>
+      <tr><td>"Select an exercise to delete / move"</td><td>Click an exercise card in that section (pink outline), then try again.</td></tr>
+      <tr><td>"All fields (Load, Organization, Coaching Point) are required"</td><td>Fill in all three boxes. Use something short like <code>n/a</code> if one genuinely doesn't apply.</td></tr>
+      <tr><td>"Please type an exercise name, or select a video"</td><td>Add one or the other in the Add Exercise box.</td></tr>
+      <tr><td>An exercise I expect isn't in the video list</td><td>1) Check you clicked <b>+ Add</b> in the right section (Warm up, Main theme or Cool down). 2) Clear the search box and untick Barbell/Dumbbell/Band. 3) If it still isn't there, its video hasn't been added to the exercise list yet. Ask the person who looks after the videos, or add it as a custom exercise.</td></tr>
+      <tr><td>"ExerciseList.txt was not found…"</td><td>The list of videos is missing from Azure. Tell whoever manages the Azure storage.</td></tr>
+      <tr><td>"No programme files found…"</td><td>Nothing has been saved to Azure yet. Create a new programme instead.</td></tr>
+      <tr><td>"Could not reach Azure…" (network or CORS)</td><td>Check your internet connection and try again. If it keeps happening on a good connection, tell whoever manages the Azure storage and quote the message.</td></tr>
+      <tr><td>"…failed (HTTP 401 / 403)"</td><td>Azure refused permission. Tell whoever manages the Azure storage and quote the message.</td></tr>
+      <tr><td>"Error saving programme…"</td><td>Your work has <u>not</u> been saved. Don't close the page. Try again in a moment, and if it keeps failing, tell whoever manages the Azure storage.</td></tr>
+      <tr><td>Clicking <b>Help guide</b> does nothing</td><td>Your browser may have blocked the pop-up. Allow pop-ups for this page and click it again.</td></tr>
+    </table>
+    <div class="top"><a href="#top">↑ Back to contents</a></div>
+  </div>
+
+</div>
+<!--HELP_SCRIPT-->
+</body>
+</html>
+
+  </script>
+
+  <script>
+    let state = { 
+      programme: null, 
+      currentFilename: null, // File on disk that the loaded programme came from / was last saved to
+      renderedWorkoutIndex: -1, // Which workout the exercise editor was last showing
+      activeWorkoutIndex: -1,
+      activeExercises: { warmUp: -1, mainTheme: -1, coolDown: -1 },
+      currentComponent: null, // 'warmUp', 'mainTheme', or 'coolDown'
+      editingExerciseIndex: -1,
+      selectedVideoFile: null,
+      lastAutoName: '', // Name most recently filled in automatically from a video
+      pbDataHandle: null, // File System Access API handle
+      useFSAPI: false, // Whether File System Access API is available
+      availableVideos: [], // List of videos for picker
+      allVideos: [], // Unfiltered list
+      selectedVideoInPicker: null,
+      availableProgrammes: [], // List of programmes for picker
+      selectedProgrammeInPicker: null,
+      programmesToDelete: [], // List of programmes for deletion
+      videoSearchTerm: '', // Persist search between uses
+      videoEquipmentFilters: [] // Persist equipment filters
+    }
+
+    function $(id){ return document.getElementById(id) }
+
+    // Makes text safe to put inside HTML (so characters like < > & can't break the display)
+    function escapeHtml(value){
+      return String(value === undefined || value === null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+    }
+
+    // Forget which exercise was last clicked in each section (nothing selected)
+    function resetActiveExercises(){
+      state.activeExercises = { warmUp: -1, mainTheme: -1, coolDown: -1 }
+    }
+
+    // Opens the help guide (stored in the page as #help-template) in a new browser tab
+    function openHelpGuide(){
+      // Small script so the index links scroll smoothly to their sections inside the help tab
+      const helpScript = "document.addEventListener('click',function(e){var a=e.target.closest('a[href^=\"#\"]');if(!a)return;e.preventDefault();var t=document.getElementById(a.getAttribute('href').slice(1));if(t){t.scrollIntoView({behavior:'smooth',block:'start'})}})"
+      const html = $('help-template').textContent
+        .replace('<!--HELP_SCRIPT-->', '<scr' + 'ipt>' + helpScript + '</scr' + 'ipt>')
+      const blob = new Blob([html], { type: 'text/html' })
+      const url = URL.createObjectURL(blob)
+      const tab = window.open(url, '_blank')
+      if(!tab) {
+        alert('Your browser blocked the help guide from opening. Please allow pop-ups for this page and try again.')
+      }
+    }
+
+    function initUI(){
+      // Check if File System Access API is available
+      if('showDirectoryPicker' in window) {
+        state.useFSAPI = true
+        $('btn-select-folder').style.display = 'inline-block'
+      } else {
+        $('btn-select-folder').style.display = 'none'
+        console.log('File System Access API not available - using fallback file inputs')
+      }
+      
+      // Populate level dropdown
+      for(let i=1; i<=12; i++){ 
+        let o = document.createElement('option')
+        o.value = i
+        o.textContent = i
+        $('level-select').appendChild(o)
+      }
+      
+      // Button handlers
+      $('btn-select-folder').onclick = selectPBDataFolder
+      $('btn-help').onclick = openHelpGuide
+      $('btn-new').onclick = newProgramme
+      $('btn-load').onclick = loadProgramme
+      $('btn-save').onclick = saveProgramme
+      $('btn-delete-programme').onclick = showDeleteUnavailableMessage
+      $('delete-unavailable-close').onclick = hideDeleteUnavailableMessage
+      $('add-workout').onclick = addWorkout
+      $('workout-up').onclick = () => moveWorkout(-1)
+      $('workout-down').onclick = () => moveWorkout(1)
+      $('del-workout').onclick = deleteWorkout
+      $('rename-workout').onclick = showRenameModal
+      
+      // Programme name changes
+      $('programme-name').oninput = (e) => {
+        if(state.programme) {
+          state.programme.name = e.target.value
+          renderPreview()
+        }
+      }
+      
+      // Programme description changes
+      $('programme-description').oninput = (e) => {
+        if(state.programme) {
+          state.programme.description = e.target.value
+          renderPreview()
+        }
+      }
+      
+      // Level changes
+      $('level-select').onchange = (e) => {
+        if(state.programme) {
+          state.programme.level = parseInt(e.target.value)
+          renderPreview()
+        }
+      }
+      
+      // Type changes
+      $('type-select').onchange = (e) => {
+        if(state.programme) {
+          state.programme.type = e.target.value
+          renderPreview()
+        }
+      }
+      
+      // Rename modal handlers
+      $('rename-cancel').onclick = hideRenameModal
+      $('rename-confirm').onclick = confirmRename
+      $('rename-input').onkeypress = (e) => {
+        if(e.key === 'Enter') confirmRename()
+      }
+      
+      // Exercise modal handlers
+      $('browse-video-btn').onclick = browseForVideo
+      $('exercise-cancel').onclick = hideExerciseModal
+      $('exercise-confirm').onclick = confirmExercise
+      
+      // Video picker modal handlers
+      $('video-picker-cancel').onclick = hideVideoPickerModal
+      $('video-picker-confirm').onclick = confirmVideoSelection
+      
+      // Video search and filters
+      $('video-search').oninput = filterVideoList
+      document.querySelectorAll('.equipment-filter').forEach(checkbox => {
+        checkbox.onchange = filterVideoList
+      })
+      
+      // Programme picker modal handlers
+      $('programme-picker-cancel').onclick = hideProgrammePickerModal
+      $('programme-picker-confirm').onclick = confirmProgrammeSelection
+      
+      // Delete programme modal handlers
+      $('delete-programme-cancel').onclick = hideDeleteProgrammeModal
+      $('delete-programme-confirm').onclick = confirmProgrammeDeletion
+      
+      // Exercise buttons - Warm Up
+      $('wu-add').onclick = () => showExerciseModal('warmUp', -1)
+      $('wu-del').onclick = () => deleteExercise('warmUp')
+      $('wu-up').onclick = () => moveExercise('warmUp', -1)
+      $('wu-down').onclick = () => moveExercise('warmUp', 1)
+      
+      // Exercise buttons - Main Theme
+      $('mt-add').onclick = () => showExerciseModal('mainTheme', -1)
+      $('mt-del').onclick = () => deleteExercise('mainTheme')
+      $('mt-up').onclick = () => moveExercise('mainTheme', -1)
+      $('mt-down').onclick = () => moveExercise('mainTheme', 1)
+      
+      // Exercise buttons - Cool Down
+      $('cd-add').onclick = () => showExerciseModal('coolDown', -1)
+      $('cd-del').onclick = () => deleteExercise('coolDown')
+      $('cd-up').onclick = () => moveExercise('coolDown', -1)
+      $('cd-down').onclick = () => moveExercise('coolDown', 1)
+      
+      renderAll()
+    }
+
+    function makeEmptyProgramme(name){
+      return { 
+        name: name || 'Untitled', 
+        description: '',
+        created: new Date().toISOString().slice(0,10), 
+        level: 1, 
+        type: 'Strength', 
+        workouts: []
+      }
+    }
+
+    function newProgramme(){
+      const name = prompt('Enter programme name:', 'New Programme')
+      if(!name) return
+      
+      state.programme = makeEmptyProgramme(name)
+      state.currentFilename = null // brand new programme, not yet saved to any file
+      resetActiveExercises()
+      state.activeWorkoutIndex = -1
+      
+      // Add first workout automatically
+      addWorkout()
+      
+      renderAll()
+    }
+
+    function addWorkout(){
+      if(!state.programme) {
+        alert('Create a new programme first')
+        return
+      }
+      
+      const workoutNumber = state.programme.workouts.length + 1
+      const newWorkout = {
+        name: `Workout ${workoutNumber}`,
+        warmUp: [],
+        mainTheme: [],
+        coolDown: []
+      }
+      
+      state.programme.workouts.push(newWorkout)
+      state.activeWorkoutIndex = state.programme.workouts.length - 1
+      
+      renderAll()
+    }
+
+    function deleteWorkout(){
+      if(!state.programme || state.activeWorkoutIndex === -1) {
+        alert('Select a workout to delete')
+        return
+      }
+      
+      const workout = state.programme.workouts[state.activeWorkoutIndex]
+      if(!confirm(`Delete "${workout.name}"?`)) return
+      
+      state.programme.workouts.splice(state.activeWorkoutIndex, 1)
+      
+      // Update active index
+      if(state.programme.workouts.length === 0) {
+        state.activeWorkoutIndex = -1
+      } else if(state.activeWorkoutIndex >= state.programme.workouts.length) {
+        state.activeWorkoutIndex = state.programme.workouts.length - 1
+      }
+      
+      renderAll()
+    }
+
+    function duplicateWorkout(index){
+      if(!state.programme) return
+      
+      const workout = state.programme.workouts[index]
+      
+      // Deep clone the workout
+      const duplicate = JSON.parse(JSON.stringify(workout))
+      
+      // Update the name
+      duplicate.name = `${workout.name} (Copy)`
+      
+      // Insert after the original
+      state.programme.workouts.splice(index + 1, 0, duplicate)
+      
+      // Select the new duplicate
+      state.activeWorkoutIndex = index + 1
+      
+      renderAll()
+    }
+
+    function moveWorkout(direction){
+      if(!state.programme || state.activeWorkoutIndex === -1) {
+        alert('Select a workout to move')
+        return
+      }
+      
+      const index = state.activeWorkoutIndex
+      const newIndex = index + direction
+      
+      if(newIndex < 0 || newIndex >= state.programme.workouts.length) {
+        return // Can't move outside bounds
+      }
+      
+      // Swap workouts
+      const temp = state.programme.workouts[index]
+      state.programme.workouts[index] = state.programme.workouts[newIndex]
+      state.programme.workouts[newIndex] = temp
+      
+      state.activeWorkoutIndex = newIndex
+      state.renderedWorkoutIndex = newIndex // same workout, just moved - keep its selection
+      renderAll()
+    }
+
+    function showRenameModal(){
+      if(!state.programme || state.activeWorkoutIndex === -1) {
+        alert('Select a workout to rename')
+        return
+      }
+      
+      const workout = state.programme.workouts[state.activeWorkoutIndex]
+      $('rename-input').value = workout.name
+      $('rename-modal').style.display = 'flex'
+      $('rename-input').focus()
+      $('rename-input').select()
+    }
+
+    function hideRenameModal(){
+      $('rename-modal').style.display = 'none'
+    }
+
+    function confirmRename(){
+      const newName = $('rename-input').value.trim()
+      if(!newName) {
+        alert('Workout name cannot be empty')
+        return
+      }
+      
+      state.programme.workouts[state.activeWorkoutIndex].name = newName
+      hideRenameModal()
+      renderAll()
+    }
+
+    function selectWorkout(index){
+      state.activeWorkoutIndex = index
+      renderAll()
+    }
+
+    async function selectPBDataFolder(){
+      try {
+        const dirHandle = await window.showDirectoryPicker({
+          mode: 'readwrite',
+          startIn: 'documents'
+        })
+        
+        state.pbDataHandle = dirHandle
+        $('folder-status').style.display = 'block'
+        $('folder-name').textContent = `Connected to: ${dirHandle.name}`
+        
+        // Verify folder structure
+        await verifyFolderStructure()
+        
+        alert(`Connected to ${dirHandle.name} folder!\n\nYou can now browse exercise videos.`)
+      } catch(err) {
+        if(err.name !== 'AbortError') {
+          alert('Error selecting folder: ' + err.message)
+        }
+      }
+    }
+
+    async function verifyFolderStructure(){
+      if(!state.pbDataHandle) return
+      
+      const requiredFolders = ['Users', 'Videos']
+      const missing = []
+      
+      for(const folderName of requiredFolders) {
+        try {
+          await state.pbDataHandle.getDirectoryHandle(folderName)
+        } catch(err) {
+          missing.push(folderName)
+        }
+      }
+      
+      if(missing.length > 0) {
+        const create = confirm(
+          `Missing folders: ${missing.join(', ')}\n\nWould you like to create them?`
+        )
+        
+        if(create) {
+          for(const folderName of missing) {
+            await state.pbDataHandle.getDirectoryHandle(folderName, { create: true })
+          }
+          alert('Folders created successfully!')
+        }
+      }
+    }
+
+    // =====================================================================
+    // Azure Blob Storage - programmes live in the 'ptme-admin-programmes' container.
+    // Same pattern as the iOS app (BlobStorageManager.swift):
+    //   1. ask the SAS function for a short-lived URL for a blob
+    //   2. GET / PUT / DELETE directly against that URL
+    // =====================================================================
+    const AZURE = {
+      sasEndpoint: 'https://gsast.azurewebsites.net/api/GenerateSASToken',
+      container: 'ptme-admin-programmes',
+      authToken: '',              // Optional bearer token, if the SAS function requires one for this container
+      deletePermissions: 'rwd'    // SAS permissions requested when deleting a programme
+    }
+
+    function azureHeaders(){
+      return AZURE.authToken ? { 'Authorization': 'Bearer ' + AZURE.authToken } : {}
+    }
+
+    function describeAzureError(err){
+      if(err instanceof TypeError) {
+        return 'Could not reach Azure (network problem, or the browser blocked the request - this is usually a CORS setting).'
+      }
+      return err.message || String(err)
+    }
+
+    // Ask the SAS function for a URL that grants access to one blob
+    async function getSasUrl(blobName, permissions){
+      const url = `${AZURE.sasEndpoint}?container=${encodeURIComponent(AZURE.container)}` +
+                  `&blob=${encodeURIComponent(blobName)}&permissions=${encodeURIComponent(permissions)}`
+      const res = await fetch(url, { headers: azureHeaders() })
+      if(!res.ok) throw new Error(`SAS request failed (HTTP ${res.status})`)
+      const json = await res.json()
+      if(!json.sas_url) throw new Error('SAS response did not contain a sas_url')
+      return json.sas_url
+    }
+
+    // List the .json programme files in the container
+    async function listProgrammeFiles(){
+      const url = `${AZURE.sasEndpoint}?container=${encodeURIComponent(AZURE.container)}&list=true`
+      const res = await fetch(url, { headers: azureHeaders() })
+      if(!res.ok) throw new Error(`Listing programmes failed (HTTP ${res.status})`)
+      const json = await res.json()
+      if(!Array.isArray(json.blobs)) throw new Error('Unexpected response when listing programmes')
+      return json.blobs.filter(name => name.endsWith('.json'))
+    }
+
+    async function readProgrammeFile(filename){
+      const sasUrl = await getSasUrl(filename, 'r')
+      const res = await fetch(sasUrl, { cache: 'no-store' })
+      if(!res.ok) throw new Error(`Download failed (HTTP ${res.status})`)
+      return JSON.parse(await res.text())
+    }
+
+    // Creates the blob, or overwrites it if it already exists
+    async function writeProgrammeFile(filename, json){
+      const sasUrl = await getSasUrl(filename, 'rw')
+      const res = await fetch(sasUrl, {
+        method: 'PUT',
+        headers: { 'x-ms-blob-type': 'BlockBlob', 'Content-Type': 'application/json' },
+        body: json
+      })
+      if(!res.ok) throw new Error(`Upload failed (HTTP ${res.status})`)
+    }
+
+    async function deleteProgrammeFile(filename){
+      const sasUrl = await getSasUrl(filename, AZURE.deletePermissions)
+      const res = await fetch(sasUrl, { method: 'DELETE' })
+      if(!res.ok) throw new Error(`Delete failed (HTTP ${res.status})`)
+    }
+
+    // ---------------------------- Load ----------------------------
+
+    async function loadProgramme(){
+      try {
+        const files = await listProgrammeFiles()
+
+        if(files.length === 0) {
+          alert(`No programme files found in the "${AZURE.container}" container`)
+          return
+        }
+
+        // Show custom programme picker modal
+        state.availableProgrammes = files
+        showProgrammePickerModal()
+
+      } catch(err) {
+        alert('Error loading programme list: ' + describeAzureError(err))
+      }
+    }
+
+    function showProgrammePickerModal(){
+      const list = $('programme-picker-list')
+      list.innerHTML = ''
+
+      state.selectedProgrammeInPicker = null
+
+      state.availableProgrammes.forEach((filename, index) => {
+        const div = document.createElement('div')
+        div.className = 'video-item'
+        div.textContent = filename
+        div.onclick = () => selectProgrammeInPicker(filename, div)
+        list.appendChild(div)
+      })
+
+      $('programme-picker-modal').style.display = 'flex'
+    }
+
+    function selectProgrammeInPicker(filename, element){
+      // Remove selection from all items
+      const items = $('programme-picker-list').querySelectorAll('.video-item')
+      items.forEach(item => item.classList.remove('selected'))
+
+      // Add selection to clicked item
+      element.classList.add('selected')
+      state.selectedProgrammeInPicker = filename
+    }
+
+    function hideProgrammePickerModal(){
+      $('programme-picker-modal').style.display = 'none'
+      state.selectedProgrammeInPicker = null
+      state.availableProgrammes = []
+    }
+
+    async function confirmProgrammeSelection(){
+      if(!state.selectedProgrammeInPicker) {
+        alert('Please select a programme')
+        return
+      }
+
+      // Remember the filename now - hiding the modal below clears the selection
+      const filename = state.selectedProgrammeInPicker
+
+      try {
+        const data = await readProgrammeFile(filename)
+
+        // Validate structure
+        if(!data.name || !data.workouts || !Array.isArray(data.workouts)) {
+          alert('Invalid programme file format')
+          return
+        }
+
+        state.programme = data
+        state.currentFilename = filename // so Save overwrites this same file
+        resetActiveExercises()
+        state.activeWorkoutIndex = data.workouts.length > 0 ? 0 : -1
+        hideProgrammePickerModal()
+        renderAll()
+        alert(`Loaded: ${data.name}`)
+      } catch(err) {
+        alert('Error loading programme: ' + describeAzureError(err))
+      }
+    }
+
+    // ---------------------------- Delete ----------------------------
+
+    // Deleting from the page isn't switched on at the moment (Azure refuses the request),
+    // so the Delete Programme button just explains where to delete programmes instead.
+    // The original delete code below is kept, unused, in case it's re-enabled later.
+    function showDeleteUnavailableMessage(){
+      $('delete-unavailable-modal').style.display = 'flex'
+    }
+
+    function hideDeleteUnavailableMessage(){
+      $('delete-unavailable-modal').style.display = 'none'
+    }
+
+
+    async function showDeleteProgrammeDialog(){
+      try {
+        const files = await listProgrammeFiles()
+
+        if(files.length === 0) {
+          alert(`No programme files found in the "${AZURE.container}" container`)
+          return
+        }
+
+        // Show delete programme modal
+        state.programmesToDelete = files
+        showDeleteProgrammeModal()
+
+      } catch(err) {
+        alert('Error accessing programmes: ' + describeAzureError(err))
+      }
+    }
+
+    function showDeleteProgrammeModal(){
+      const list = $('delete-programme-list')
+      list.innerHTML = ''
+
+      state.selectedProgrammeInPicker = null
+
+      state.programmesToDelete.forEach((filename, index) => {
+        const div = document.createElement('div')
+        div.className = 'video-item'
+        div.textContent = filename
+        div.onclick = () => selectProgrammeForDeletion(filename, div)
+        list.appendChild(div)
+      })
+
+      $('delete-programme-modal').style.display = 'flex'
+    }
+
+    function selectProgrammeForDeletion(filename, element){
+      // Remove selection from all items
+      const items = $('delete-programme-list').querySelectorAll('.video-item')
+      items.forEach(item => item.classList.remove('selected'))
+
+      // Add selection to clicked item
+      element.classList.add('selected')
+      state.selectedProgrammeInPicker = filename
+    }
+
+    function hideDeleteProgrammeModal(){
+      $('delete-programme-modal').style.display = 'none'
+      state.selectedProgrammeInPicker = null
+      state.programmesToDelete = []
+    }
+
+    async function confirmProgrammeDeletion(){
+      if(!state.selectedProgrammeInPicker) {
+        alert('Please select a programme to delete')
+        return
+      }
+
+      const filename = state.selectedProgrammeInPicker
+
+      if(!confirm(`Are you sure you want to permanently delete:\n\n${filename}\n\nThis cannot be undone!`)) {
+        return
+      }
+
+      try {
+        await deleteProgrammeFile(filename)
+
+        hideDeleteProgrammeModal()
+        alert(`Deleted: ${filename}`)
+
+        // If we just deleted the file the current programme came from, clear the editor.
+        // Exact filename match, so similarly-named programmes can't be confused.
+        if(state.currentFilename && state.currentFilename === filename) {
+          state.programme = null
+          state.currentFilename = null
+          state.activeWorkoutIndex = -1
+          renderAll()
+        }
+      } catch(err) {
+        alert('Error deleting programme: ' + describeAzureError(err))
+      }
+    }
+
+    // ---------------------------- Save ----------------------------
+
+    async function saveProgramme(){
+      if(!state.programme) {
+        alert('Create a programme first')
+        return
+      }
+
+      try {
+        // If this programme was loaded from / already saved to a file, overwrite that same file.
+        // Otherwise generate a new filename.
+        let filename = state.currentFilename
+        if(!filename) {
+          const date = new Date().toISOString().slice(0,10)
+          const safeName = state.programme.name.replace(/[^a-z0-9]/gi, '-')
+          filename = `${date}_${safeName}_Level${state.programme.level}_${state.programme.type}.json`
+        }
+
+        const json = JSON.stringify(state.programme, null, 2)
+
+        await writeProgrammeFile(filename, json)
+
+        state.currentFilename = filename
+        alert(`Saved to ${AZURE.container}/${filename}`)
+      } catch(err) {
+        alert('Error saving programme: ' + describeAzureError(err))
+      }
+    }
+
+    function renderWorkoutList(){
+      const list = $('workout-list')
+      list.innerHTML = ''
+      
+      if(!state.programme || state.programme.workouts.length === 0) {
+        list.innerHTML = '<div class="muted" style="padding:8px">No workouts yet</div>'
+        return
+      }
+      
+      state.programme.workouts.forEach((workout, index) => {
+        const div = document.createElement('div')
+        div.className = 'workout-item'
+        if(index === state.activeWorkoutIndex) {
+          div.classList.add('active')
+        }
+        
+        const nameSpan = document.createElement('span')
+        nameSpan.className = 'workout-name'
+        nameSpan.textContent = workout.name
+        nameSpan.onclick = () => selectWorkout(index)
+        
+        const iconsDiv = document.createElement('div')
+        iconsDiv.className = 'workout-icons'
+        
+        const duplicateIcon = document.createElement('span')
+        duplicateIcon.className = 'workout-icon'
+        duplicateIcon.innerHTML = '📋'
+        duplicateIcon.title = 'Duplicate workout'
+        duplicateIcon.onclick = (e) => {
+          e.stopPropagation()
+          duplicateWorkout(index)
+        }
+        
+        const editIcon = document.createElement('span')
+        editIcon.className = 'workout-icon'
+        editIcon.innerHTML = '✏️'
+        editIcon.title = 'Rename workout'
+        editIcon.onclick = (e) => {
+          e.stopPropagation()
+          state.activeWorkoutIndex = index
+          showRenameModal()
+        }
+        
+        const deleteIcon = document.createElement('span')
+        deleteIcon.className = 'workout-icon'
+        deleteIcon.innerHTML = '🗑️'
+        deleteIcon.title = 'Delete workout'
+        deleteIcon.onclick = (e) => {
+          e.stopPropagation()
+          state.activeWorkoutIndex = index
+          deleteWorkout()
+        }
+        
+        iconsDiv.appendChild(duplicateIcon)
+        iconsDiv.appendChild(editIcon)
+        iconsDiv.appendChild(deleteIcon)
+        
+        div.appendChild(nameSpan)
+        div.appendChild(iconsDiv)
+        
+        list.appendChild(div)
+      })
+    }
+
+    function renderEditor(){
+      if(!state.programme || state.activeWorkoutIndex === -1) {
+        $('no-workout-msg').style.display = 'block'
+        resetActiveExercises()
+        state.renderedWorkoutIndex = -1
+        $('editor-rows').style.display = 'none'
+        return
+      }
+      
+      $('no-workout-msg').style.display = 'none'
+      $('editor-rows').style.display = 'grid'
+      
+      const workout = state.programme.workouts[state.activeWorkoutIndex]
+      
+      // If a different workout is now showing, forget the old selections
+      if(state.renderedWorkoutIndex !== state.activeWorkoutIndex) {
+        resetActiveExercises()
+        state.renderedWorkoutIndex = state.activeWorkoutIndex
+      }
+      
+      renderExerciseList('wu-list', workout.warmUp, 'warmUp')
+      renderExerciseList('mt-list', workout.mainTheme, 'mainTheme')
+      renderExerciseList('cd-list', workout.coolDown, 'coolDown')
+    }
+
+    function renderExerciseList(elementId, exercises, component){
+      const list = $(elementId)
+      list.innerHTML = ''
+      
+      if(exercises.length === 0) {
+        list.innerHTML = '<div class="muted">No exercises</div>'
+        return
+      }
+      
+      exercises.forEach((exercise, index) => {
+        const div = document.createElement('div')
+        div.className = 'exercise-display'
+        if(index === state.activeExercises[component]) {
+          div.classList.add('active')
+        }
+        
+        const content = document.createElement('div')
+        content.className = 'exercise-content'
+        content.innerHTML = `
+          <div class="exercise-title">${escapeHtml(exercise.name)}</div>
+          <div class="exercise-detail">Load: ${escapeHtml(exercise.load)}</div>
+          <div class="exercise-detail">Org: ${escapeHtml(exercise.organization)}</div>
+          <div class="exercise-detail">CP: ${escapeHtml(exercise.coachingPoint)}</div>
+        `
+        
+        const editIcon = document.createElement('span')
+        editIcon.className = 'exercise-edit-icon'
+        editIcon.innerHTML = '✏️'
+        editIcon.title = 'Edit exercise'
+        editIcon.onclick = (e) => {
+          e.stopPropagation()
+          showExerciseModal(component, index)
+        }
+        
+        div.appendChild(content)
+        div.appendChild(editIcon)
+        
+        div.onclick = () => selectExercise(component, index)
+        div.ondblclick = () => showExerciseModal(component, index)
+        
+        list.appendChild(div)
+      })
+    }
+
+    function selectExercise(component, index){
+      state.activeExercises[component] = index
+      renderEditor()
+    }
+
+    // ---------------------------------------------------------------------
+    // Exercise video list
+    // The list of available exercise videos is a plain text file stored in the same
+    // Azure container as the programmes. One video filename per line, for example:
+    //     wu_goblet_squat.mp4
+    //     mt_barbell_back_squat.mp4
+    //     cd_hamstring_stretch.mp4
+    // Blank lines, and lines starting with #, are ignored.
+    // ---------------------------------------------------------------------
+    const EXERCISE_LIST_FILE = 'ExerciseList.txt'
+
+    async function readExerciseListFile(){
+      const sasUrl = await getSasUrl(EXERCISE_LIST_FILE, 'r')
+      const res = await fetch(sasUrl, { cache: 'no-store' })
+      if(res.status === 404) {
+        throw new Error(`"${EXERCISE_LIST_FILE}" was not found in the "${AZURE.container}" container`)
+      }
+      if(!res.ok) throw new Error(`Download failed (HTTP ${res.status})`)
+
+      const text = (await res.text()).replace(/^\uFEFF/, '') // drop invisible byte-order mark if present
+      const names = text.split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(line => line && !line.startsWith('#'))
+      return Array.from(new Set(names)) // remove accidental duplicates
+    }
+
+    function browseForVideo(){
+      browseForVideoFromAzure()
+    }
+
+    async function browseForVideoFromAzure(){
+      try {
+        const allNames = await readExerciseListFile()
+
+        // Only show videos with the correct prefix for this section
+        const prefix = state.currentComponent === 'warmUp' ? 'wu_' :
+                      state.currentComponent === 'mainTheme' ? 'mt_' : 'cd_'
+
+        const videos = allNames.filter(name => name.startsWith(prefix))
+
+        if(videos.length === 0) {
+          alert(`No videos starting with "${prefix}" were found in ${EXERCISE_LIST_FILE}`)
+          return
+        }
+
+        // Sort alphabetically
+        videos.sort((a, b) => a.localeCompare(b))
+
+        // Store both filtered and all videos
+        state.allVideos = videos
+        state.availableVideos = videos
+
+        // Show custom video picker modal
+        showVideoPickerModal()
+
+      } catch(err) {
+        alert('Error browsing videos: ' + describeAzureError(err))
+      }
+    }
+
+    function filterVideoList(){
+      const searchTerm = $('video-search').value.toLowerCase()
+      
+      // Save search term to state
+      state.videoSearchTerm = searchTerm
+      
+      // Get selected equipment filters and save to state
+      const equipmentFilters = []
+      document.querySelectorAll('.equipment-filter:checked').forEach(checkbox => {
+        equipmentFilters.push(checkbox.value)
+      })
+      state.videoEquipmentFilters = equipmentFilters
+      
+      // Filter videos
+      let filtered = state.allVideos.filter(videoName => {
+        const lowerName = videoName.toLowerCase()
+        
+        // Apply search filter
+        if(searchTerm && !lowerName.includes(searchTerm)) {
+          return false
+        }
+        
+        // Apply equipment filter (if any selected)
+        if(equipmentFilters.length > 0) {
+          const hasEquipment = equipmentFilters.some(equipment => 
+            lowerName.includes(equipment)
+          )
+          if(!hasEquipment) {
+            return false
+          }
+        }
+        
+        return true
+      })
+      
+      state.availableVideos = filtered
+      renderVideoList()
+    }
+
+    function showVideoPickerModal(){
+      // Restore previous search and filters from state
+      $('video-search').value = state.videoSearchTerm
+      document.querySelectorAll('.equipment-filter').forEach(checkbox => {
+        checkbox.checked = state.videoEquipmentFilters.includes(checkbox.value)
+      })
+      
+      state.selectedVideoInPicker = null
+      
+      // Apply filters immediately
+      filterVideoList()
+      
+      $('video-picker-modal').style.display = 'flex'
+      $('video-search').focus()
+    }
+
+    function renderVideoList(){
+      const list = $('video-picker-list')
+      list.innerHTML = ''
+      
+      if(state.availableVideos.length === 0) {
+        list.innerHTML = '<div class="muted" style="padding:16px;text-align:center">No exercises match your filters</div>'
+        return
+      }
+      
+      state.availableVideos.forEach((videoName, index) => {
+        const div = document.createElement('div')
+        div.className = 'video-item'
+        div.textContent = videoName
+        div.onclick = () => selectVideoInPicker(videoName, div)
+        list.appendChild(div)
+      })
+    }
+
+    function selectVideoInPicker(videoName, element){
+      // Remove selection from all items
+      const items = document.querySelectorAll('.video-item')
+      items.forEach(item => item.classList.remove('selected'))
+      
+      // Add selection to clicked item
+      element.classList.add('selected')
+      state.selectedVideoInPicker = videoName
+    }
+
+    function hideVideoPickerModal(){
+      $('video-picker-modal').style.display = 'none'
+      state.selectedVideoInPicker = null
+      state.availableVideos = []
+      state.allVideos = []
+      // Don't clear search term or filters - they persist in state
+    }
+
+    // wu_goblet_squat.mp4  ->  "Goblet Squat"
+    function deriveExerciseName(filename){
+      return String(filename || '')
+        .replace(/^(wu_|mt_|cd_)/, '')
+        .replace(/\.[^/.]+$/, '')
+        .replace(/[-_]/g, ' ')
+        .replace(/\b\w/g, l => l.toUpperCase())
+    }
+
+    function confirmVideoSelection(){
+      if(!state.selectedVideoInPicker) {
+        alert('Please select a video')
+        return
+      }
+      
+      // Store the selected video info
+      state.selectedVideoFile = { name: state.selectedVideoInPicker }
+      
+      // Fill in the name from the video, unless the user has typed their own
+      const nameBox = $('exercise-name')
+      if(nameBox.value.trim() === '' || nameBox.value === state.lastAutoName) {
+        state.lastAutoName = deriveExerciseName(state.selectedVideoInPicker)
+        nameBox.value = state.lastAutoName
+      }
+      $('selected-video').textContent = state.selectedVideoInPicker
+      $('selected-video').style.color = '#111'
+      
+      hideVideoPickerModal()
+    }
+
+    function showExerciseModal(component, exerciseIndex){
+      if(!state.programme || state.activeWorkoutIndex === -1) {
+        alert('Select a workout first')
+        return
+      }
+      
+      state.currentComponent = component
+      state.editingExerciseIndex = exerciseIndex
+      state.selectedVideoFile = null
+      
+      const isEditing = exerciseIndex !== -1
+      $('exercise-modal-title').textContent = isEditing ? 'Edit Exercise' : 'Add Exercise'
+      $('exercise-confirm').textContent = isEditing ? 'Save Changes' : 'Add Exercise'
+      
+      if(isEditing) {
+        const workout = state.programme.workouts[state.activeWorkoutIndex]
+        const exercise = workout[component][exerciseIndex]
+        
+        $('exercise-name').value = exercise.name || ''
+        state.lastAutoName = exercise.videoFile ? deriveExerciseName(exercise.videoFile) : ''
+        $('exercise-load').value = exercise.load
+        $('exercise-org').value = exercise.organization
+        $('exercise-coaching').value = exercise.coachingPoint
+        $('selected-video').textContent = exercise.videoFile || 'No video selected'
+        $('selected-video').style.color = '#111'
+      } else {
+        $('exercise-name').value = ''
+        state.lastAutoName = ''
+        $('exercise-load').value = ''
+        $('exercise-org').value = ''
+        $('exercise-coaching').value = ''
+        $('selected-video').textContent = 'No video selected'
+        $('selected-video').style.color = '#666'
+      }
+      
+      $('exercise-modal').style.display = 'flex'
+      $('exercise-load').focus()
+    }
+
+    function hideExerciseModal(){
+      $('exercise-modal').style.display = 'none'
+      state.currentComponent = null
+      state.editingExerciseIndex = -1
+      state.selectedVideoFile = null
+    }
+
+    function confirmExercise(){
+      const load = $('exercise-load').value.trim()
+      const org = $('exercise-org').value.trim()
+      const coaching = $('exercise-coaching').value.trim()
+      const typedName = $('exercise-name').value.trim()
+
+      if(!load || !org || !coaching) {
+        alert('All fields (Load, Organization, Coaching Point) are required')
+        return
+      }
+
+      const isEditing = state.editingExerciseIndex !== -1
+      const workout = state.programme.workouts[state.activeWorkoutIndex]
+      const existing = isEditing ? workout[state.currentComponent][state.editingExerciseIndex] : null
+
+      // Video is optional: use a newly selected one, otherwise keep the existing one (if any)
+      const videoFile = state.selectedVideoFile
+        ? state.selectedVideoFile.name
+        : (existing ? (existing.videoFile || '') : '')
+
+      // Name: whatever is in the name box, otherwise taken from the video
+      const exerciseName = typedName || (videoFile ? deriveExerciseName(videoFile) : '')
+
+      if(!exerciseName) {
+        alert('Please type an exercise name, or select a video')
+        return
+      }
+
+      const exercise = {
+        name: exerciseName,
+        videoFile: videoFile, // empty string for an exercise with no video
+        load: load,
+        organization: org,
+        coachingPoint: coaching
+      }
+
+      if(isEditing) {
+        workout[state.currentComponent][state.editingExerciseIndex] = exercise
+      } else {
+        workout[state.currentComponent].push(exercise)
+        state.activeExercises[state.currentComponent] = workout[state.currentComponent].length - 1
+      }
+
+      hideExerciseModal()
+      renderAll()
+    }
+
+    function deleteExercise(component){
+      const index = state.activeExercises[component]
+      if(index === -1) {
+        alert('Select an exercise to delete')
+        return
+      }
+      
+      const workout = state.programme.workouts[state.activeWorkoutIndex]
+      const exercise = workout[component][index]
+      
+      if(!confirm(`Delete "${exercise.name}"?`)) return
+      
+      workout[component].splice(index, 1)
+      
+      // Update active index
+      if(workout[component].length === 0) {
+        state.activeExercises[component] = -1
+      } else if(index >= workout[component].length) {
+        state.activeExercises[component] = workout[component].length - 1
+      }
+      
+      renderAll()
+    }
+
+    function moveExercise(component, direction){
+      const index = state.activeExercises[component]
+      if(index === -1) {
+        alert('Select an exercise to move')
+        return
+      }
+      
+      const workout = state.programme.workouts[state.activeWorkoutIndex]
+      const exercises = workout[component]
+      const newIndex = index + direction
+      
+      if(newIndex < 0 || newIndex >= exercises.length) {
+        return // Can't move outside bounds
+      }
+      
+      // Swap exercises
+      const temp = exercises[index]
+      exercises[index] = exercises[newIndex]
+      exercises[newIndex] = temp
+      
+      state.activeExercises[component] = newIndex
+      renderAll()
+    }
+
+    function renderPreview(){
+      if(!state.programme) {
+        $('meta-view').textContent = 'No programme loaded'
+        $('preview').textContent = ''
+        return
+      }
+      
+      // Show metadata
+      $('meta-view').textContent = `${state.programme.name} | Level ${state.programme.level} | ${state.programme.type}`
+      
+      // Format preview nicely
+      let preview = `Programme: ${state.programme.name}\n`
+      preview += `Level: ${state.programme.level} | Type: ${state.programme.type}\n`
+      preview += `Created: ${state.programme.created}\n`
+      
+      if(state.programme.description) {
+        preview += `\nDescription: ${state.programme.description}\n`
+      }
+      
+      if(state.programme.workouts.length === 0) {
+        preview += '\nNo workouts yet'
+      } else {
+        state.programme.workouts.forEach((workout, i) => {
+          preview += `\n\n${i + 1}. ${workout.name}\n`
+          preview += `${'='.repeat(workout.name.length + 3)}\n`
+          
+          if(workout.warmUp.length > 0) {
+            preview += `\nWarm Up:\n`
+            workout.warmUp.forEach((ex, j) => {
+              preview += `  ${j+1}. ${ex.name}\n`
+              preview += `     Load: ${ex.load} | Org: ${ex.organization}\n`
+              preview += `     CP: ${ex.coachingPoint}\n`
+            })
+          }
+          
+          if(workout.mainTheme.length > 0) {
+            preview += `\nMain Theme:\n`
+            workout.mainTheme.forEach((ex, j) => {
+              preview += `  ${j+1}. ${ex.name}\n`
+              preview += `     Load: ${ex.load} | Org: ${ex.organization}\n`
+              preview += `     CP: ${ex.coachingPoint}\n`
+            })
+          }
+          
+          if(workout.coolDown.length > 0) {
+            preview += `\nCool Down:\n`
+            workout.coolDown.forEach((ex, j) => {
+              preview += `  ${j+1}. ${ex.name}\n`
+              preview += `     Load: ${ex.load} | Org: ${ex.organization}\n`
+              preview += `     CP: ${ex.coachingPoint}\n`
+            })
+          }
+        })
+      }
+      
+      $('preview').textContent = preview
+    }
+
+    // Switch controls on or off depending on whether a programme exists.
+    // Publish additionally needs at least one exercise in the programme.
+    function updateControlState(){
+      const hasProgramme = !!state.programme
+      const hasExercise = hasProgramme && state.programme.workouts.some(w =>
+        (w.warmUp && w.warmUp.length) || (w.mainTheme && w.mainTheme.length) || (w.coolDown && w.coolDown.length))
+      
+      const needsProgramme = ['level-select', 'type-select', 'programme-name', 'programme-description',
+        'btn-save', 'add-workout', 'workout-up', 'workout-down', 'del-workout', 'rename-workout']
+      needsProgramme.forEach(id => { $(id).disabled = !hasProgramme })
+      
+      $('btn-publish').disabled = !hasExercise
+    }
+
+    function renderAll(){
+      if(!state.programme) {
+        $('programme-name').value = ''
+        $('programme-description').value = ''
+        $('level-select').value = '1'
+        $('type-select').value = 'Strength'
+      } else {
+        $('programme-name').value = state.programme.name
+        $('programme-description').value = state.programme.description || ''
+        $('level-select').value = state.programme.level
+        $('type-select').value = state.programme.type
+      }
+      
+      renderWorkoutList()
+      renderEditor()
+      renderPreview()
+      updateControlState()
+    }
+
+    // Close modal if clicking outside
+    $('rename-modal').onclick = (e) => {
+      if(e.target === $('rename-modal')) {
+        hideRenameModal()
+      }
+    }
+    
+    $('exercise-modal').onclick = (e) => {
+      if(e.target === $('exercise-modal')) {
+        hideExerciseModal()
+      }
+    }
+    
+    $('video-picker-modal').onclick = (e) => {
+      if(e.target === $('video-picker-modal')) {
+        hideVideoPickerModal()
+      }
+    }
+    
+    $('programme-picker-modal').onclick = (e) => {
+      if(e.target === $('programme-picker-modal')) {
+        hideProgrammePickerModal()
+      }
+    }
+    
+    $('delete-unavailable-modal').onclick = (e) => {
+      if(e.target === $('delete-unavailable-modal')) {
+        hideDeleteUnavailableMessage()
+      }
+    }
+    
+    $('delete-programme-modal').onclick = (e) => {
+      if(e.target === $('delete-programme-modal')) {
+        hideDeleteProgrammeModal()
+      }
+    }
+
+    initUI()
+  </script>
+</body>
+</html>
